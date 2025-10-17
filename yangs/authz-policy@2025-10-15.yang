@@ -1,0 +1,58 @@
+module authz-policy {
+    namespace "urn:ietf:params:xml:ns:yang:authz-policy";
+    prefix pex;  
+    organization
+        "IETF NMOP";
+    contact
+        "WG Web:   <https://datatracker.ietf.org/wg/nmop/>
+        WG List:  <mailto:nmop@ietf.org>
+    Authors:
+        Lucia Cabanillas <mailto:lucia.cabanillasrodriguez@telefonica.com>
+        Diego Lopez <mailto:diego.r.lopez@telefonica.com>
+        Ana Méndez Pérez <mailto:ana.mendezperez@telefonica.com>";
+    description
+        "A simple illustrative model for representing a declarative policy, including its language and rule content.";  
+    revision 2025-10-15 {
+        description
+            "First revision";
+        reference
+            "RFC XXXX: Model for distributed authorization policy sharing";
+     }
+    container policy {
+        leaf id {
+            type string;
+            description
+                "Unique identifier for the policy instance.";
+            }
+        leaf description {
+            type string;
+            description
+                "Optional human-readable description of the policy.";
+            }
+        leaf language {
+            type enumeration {
+                enum rego {
+                description "The policy is written in Rego syntax.";
+                }
+                enum cedar {
+                description "The policy is written in Cedar syntax.";
+                }
+                enum alfa {
+                description "The policy is defined in ALFA format.";
+                }
+            }
+            description
+                "Specifies the language used to express the policy.";
+        }
+        leaf rule {
+            type string;
+            description
+                "Example:    package example
+                # Allow read access if the user has the 'read' role
+                default allow = false
+                allow {
+                    input.user.role ==\"read\"
+                }";
+        }
+    }
+}
