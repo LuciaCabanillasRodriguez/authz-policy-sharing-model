@@ -9,17 +9,17 @@ number:
 date:
 consensus: true
 v: 00
-# area: "Operations and Management"
-# workgroup: "Network Management Operations"
+area: "Operations and Management"
+workgroup: "Network Management Operations"
 keyword:
  - policy
  - authorization
  - granularity
 venue:
-#  group: "Network Management Operations"
-#  type: "Working Group"
-#  mail: "nmop@ietf.org"
-#  arch: "https://mailarchive.ietf.org/arch/browse/nmop/"
+  group: "Network Management Operations"
+  type: "Working Group"
+  mail: "nmop@ietf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/nmop/"
   github: "LuciaCabanillasRodriguez/authz-policy-sharing-model"
   latest: "https://LuciaCabanillasRodriguez.github.io/authz-policy-sharing-model/draft-nmop-cabanillas-authz-policy-sharing-model.html"
 
