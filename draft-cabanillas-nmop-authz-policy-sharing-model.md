@@ -3,7 +3,7 @@ title: "Model for distributed authorization policy sharing"
 abbrev: "authz-policy-sharing-model"
 category: info
 
-docname: draft-nmop-cabanillas-authz-policy-sharing-model-latest
+docname: draft-cabanillas-nmop-authz-policy-sharing-model-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
@@ -21,7 +21,7 @@ venue:
   mail: "nmop@ietf.org"
   arch: "https://mailarchive.ietf.org/arch/browse/nmop/"
   github: "LuciaCabanillasRodriguez/authz-policy-sharing-model"
-  latest: "https://LuciaCabanillasRodriguez.github.io/authz-policy-sharing-model/draft-nmop-cabanillas-authz-policy-sharing-model.html"
+  latest: "https://LuciaCabanillasRodriguez.github.io/authz-policy-sharing-model/draft-cabanillas-nmop-authz-policy-sharing-model.html"
 
 author:
  - name: Lucía Cabanillas Rodríguez
