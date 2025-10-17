@@ -3,7 +3,7 @@ title: "Model for distributed authorization policy sharing"
 abbrev: "authz-policy-sharing-model"
 category: info
 
-docname: draft-nmop-cabanillas-authz-policy-sharing-model
+docname: draft-nmop-cabanillas-authz-policy-sharing-model-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
