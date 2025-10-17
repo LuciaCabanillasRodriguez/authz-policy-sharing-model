@@ -10,7 +10,7 @@ Expires: 20 April 2026                                        Telefonica
 
 
            Model for distributed authorization policy sharing
-            draft-nmop-cabanillas-authz-policy-sharing-model
+        draft-nmop-cabanillas-authz-policy-sharing-model-latest
 
 Abstract
 
@@ -38,7 +38,7 @@ About This Document
    model/draft-nmop-cabanillas-authz-policy-sharing-model.html.  Status
    information for this document may be found at
    https://datatracker.ietf.org/doc/draft-nmop-cabanillas-authz-policy-
-   sharing/.
+   sharing-model/.
 
    Discussion of this document takes place on the Network Management
    Operations Working Group mailing list (mailto:nmop@ietf.org), which
