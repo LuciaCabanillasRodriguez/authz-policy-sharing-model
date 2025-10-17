@@ -8,7 +8,7 @@ submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
 consensus: true
-v: 3
+v: 00
 area: "Operations and Management"
 workgroup: "Network Management Operations"
 keyword:
@@ -35,11 +35,15 @@ author:
    email: "ana.mendezperez@telefonica.com"
 
 normative:
-
+ RFC9052:
+ I-D.ietf-opsawg-yang-provenance: I-D.ietf-opsawg-yang-provenance
+ 
 informative:
 
 ...
----
+
+--- abstract
+
 This document defines mechanisms and conventions for the representation and sharing of authorization policies in distributed and automated environments. It specifies the foundational elements required to express policies in a consistent, machine-readable, and interoperable manner, enabling fine-grained control and context-aware evaluation.
 
 The framework supports the complete policy lifecycle, including creation, validation, versioning, distribution, and decommissioning, with YANG serving as the canonical representation format. It also establishes the relationship between policy representation and the structure of tokens used in enforcement and authorization exchanges, ensuring coherent and dynamic policy evaluation across heterogeneous systems.
@@ -213,46 +217,45 @@ The Policy Administration Point (PAP) is the central manager: it extracts the Pa
 The following describes the operational flow of policies across the functional components, highlighting how YANG-based policy definitions and PaC are handled.
 
 ```
+                                                                                    
+                                                                                    
+                                                                                    
+                                       Policy Author                                
+                                             |                                      
+                                             |                                      
+                                             |YANG policy                           
+                                             |                                      
+                           +-----------------v-----------------+                    
+                           |    Policy Administration Point    |                    
+                           -------------------------------------                    
+                           | - Validates provenance and schema |                    
+                           | - YANG-based policy               |                    
+                           | - Adapts/distributes PaC to PDPs  |                    
+                           +-----------------|-----------------+                    
+                                             |                                      
+                                             |Policy distribution                   
+                                             |                                      
+                        +-----------------------------------------+                 
+                        |          Policy Decision Point          |                 
+                        -------------------------------------------                 
+                        |- PaC (fine-grained contextual policies) |                 
+                        |                                         |                 
+                        |                                         |                 
+                        +--------------------|--------------------+                 
+                                             |                                      
+                                             |Enforcement info                      
+                                             |                                      
+                           +-----------------v-----------------+                    
+                           |      Policy Enforcement Point     |                    
+                           -------------------------------------                    
+                           | - Enforces runtime decisions      |                    
+                           |                                   |                    
+                           |                                   |                    
+                           +-----------------------------------+                    
+                                                                                    
+                                                                                    
                                                                                       
-                                                                                      
-                                                                                      
-                                       Policy Author                                  
-                                             |                                        
-                                             |                                        
-                                             |YANG policy                             
-                                             |                                        
-                           +-----------------v-----------------+                      
-                           |    Policy Administration Point    |                      
-                           -------------------------------------                      
-                           | - Validates provenance and schema |                      
-                           | - YANG-based policy               |                      
-                           | - Adapts/distributes PaC to PDPs  |                      
-                           +-----------------|-----------------+                      
-                                             |                                        
-                                             |Policy distribution                     
-                                             |                                        
-                        +-----------------------------------------+                   
-                        |          Policy Decision Point          |                   
-                        -------------------------------------------                   
-                        |- PaC (fine-grained contextual policies) |                   
-                        |                                         |                   
-                        |                                         |                   
-                        +--------------------|--------------------+                   
-                                             |                                        
-                                             |Enforcement info                        
-                                             |                                        
-                           +-----------------v-----------------+                      
-                           |      Policy Enforcement Point     |                      
-                           -------------------------------------                      
-                           | - Enforces runtime decisions      |                      
-                           |                                   |                      
-                           |                                   |                      
-                           +-----------------------------------+                      
-                                                                                      
-                                                                                      
-                                                                                        
 ```
-
 
 # Security Considerations
 
