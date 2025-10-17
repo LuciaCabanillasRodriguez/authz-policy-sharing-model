@@ -37,7 +37,7 @@ author:
 normative:
  RFC9052:
  I-D.ietf-opsawg-yang-provenance: I-D.ietf-opsawg-yang-provenance
- 
+
 informative:
 
 ...
@@ -272,7 +272,6 @@ This document has no IANA actions.
 --- back
 
 # Acknowledgments
-
 {:numbered="false"}
 
 This document is based on work partially funded by the iTrust6G project (Grant agreement N 101097083) and the ROBUST-6G project (Grant agreement N 101139068).
