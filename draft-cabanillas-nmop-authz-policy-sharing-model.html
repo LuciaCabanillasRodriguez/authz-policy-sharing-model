@@ -1425,24 +1425,20 @@ module authz-policy {
                            |
                            |  YANG-encoded policy artifact
                            v
-              +-----------------------------------+
-              | Policy Administration Point (PAP) |
-              |-----------------------------------|
-              | - Schema validation               |
-              | - Provenance verification         |
-              | - Version enforcement             |
-              | - Lifecycle state management      |
-              |-----------------------------------|
-              |  Governance Authorization Check   |
-              |  (PAP -&gt; PDP query)               |
-              |-----------------------------------|
-              |  Accounting Ledger                |
-              |  - create / update                |
-              |  - rollback / retire              |
-              +------------------+----------------+
-                                 |
-                                 |  Authorized policy
-                                 v
+        +-----------------------------------+     +-------------------------+
+        | Policy Administration Point (PAP) |----&gt;|    Accounting Ledger    |
+        |-----------------------------------|     |-------------------------|
+        | - Schema validation               |     | - create / update       |
+        | - Provenance verification         |     | - rollback / retire     |
+        | - Version enforcement             |     +-------------------------+
+        | - Lifecycle state management      |
+        |-----------------------------------|
+        |  Governance Authorization Check   |
+        |  (PAP -&gt; PDP query)               |
+        +------------------+----------------+
+                           |
+                           |  Authorized policy
+                           v
               +-----------------------------------+
               | Policy Decision Point (PDP)       |
               |-----------------------------------|
