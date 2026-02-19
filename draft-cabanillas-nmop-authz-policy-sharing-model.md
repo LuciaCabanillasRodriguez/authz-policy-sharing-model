@@ -222,24 +222,20 @@ The following diagram illustrates the logical interaction flow:
                            |
                            |  YANG-encoded policy artifact
                            v
-              +-----------------------------------+
-              | Policy Administration Point (PAP) |
-              |-----------------------------------|
-              | - Schema validation               |
-              | - Provenance verification         |
-              | - Version enforcement             |
-              | - Lifecycle state management      |
-              |-----------------------------------|
-              |  Governance Authorization Check   |
-              |  (PAP -> PDP query)               |
-              |-----------------------------------|
-              |  Accounting Ledger                |
-              |  - create / update                |
-              |  - rollback / retire              |
-              +------------------+----------------+
-                                 |
-                                 |  Authorized policy
-                                 v
+        +-----------------------------------+     +-------------------------+
+        | Policy Administration Point (PAP) |---->|    Accounting Ledger    |
+        |-----------------------------------|     |-------------------------|
+        | - Schema validation               |     | - create / update       |
+        | - Provenance verification         |     | - rollback / retire     |
+        | - Version enforcement             |     +-------------------------+
+        | - Lifecycle state management      |
+        |-----------------------------------|
+        |  Governance Authorization Check   |
+        |  (PAP -> PDP query)               |
+        +------------------+----------------+
+                           |
+                           |  Authorized policy
+                           v
               +-----------------------------------+
               | Policy Decision Point (PDP)       |
               |-----------------------------------|
