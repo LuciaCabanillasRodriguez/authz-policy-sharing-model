@@ -1,0 +1,63 @@
+module authz-policy {
+    namespace "urn:ietf:params:xml:ns:yang:authz-policy";
+    prefix pex;  
+    organization
+        "IETF NMOP";
+    contact
+        "WG Web:   <https://datatracker.ietf.org/wg/nmop/>
+        WG List:  <mailto:nmop@ietf.org>
+    Authors:
+        Lucía Cabanillas <mailto:lucia.cabanillasrodriguez@telefonica.com>
+        Diego López <mailto:diego.r.lopez@telefonica.com>
+        Ana Méndez Pérez <mailto:ana.mendezperez@telefonica.com>";
+    description
+        "Illustrative YANG model for representing authorization policies as managed artifacts";  
+    revision 2026-02-10 {
+        description
+            "Second revision";
+        reference
+            "RFC XXXX: Model for distributed authorization policy sharing";
+     }
+    container policy {
+        leaf description {
+            type string;
+            description
+                "Optional human-readable description of the policy";
+        }
+        leaf language {
+            type enumeration {
+                enum rego {
+                description "The policy is written in Rego syntax";
+                }
+                enum cedar {
+                description "The policy is written in Cedar syntax";
+                }
+                enum alfa {
+                description "The policy is defined in ALFA format";
+                }
+            }
+            description
+                "Specifies the language used to express the policy";
+        }
+        leaf rule {
+            type string;
+            description
+                "Example:    package example
+                # Allow read access if the user has the 'read' role
+                default allow = false
+                allow {
+                    input.user.role ==\"read\"
+                }";
+        }
+        leaf owner {
+            type string;
+            description
+                "Identifier of the policy owner";
+        }
+        leaf version {
+            type string;
+            description
+                "Semantic version of the policy following Git-style tags (e.g., v1.0.0)";
+        }
+    }
+}
