@@ -37,6 +37,7 @@ author:
 normative:
  RFC9052:
  I-D.ietf-opsawg-yang-provenance: I-D.ietf-opsawg-yang-provenance
+ RFC2904:
 
 informative:
 
@@ -123,7 +124,7 @@ The YANG model below illustrates a simplified structure for representing authori
 ```
 module authz-policy {
     namespace "urn:ietf:params:xml:ns:yang:authz-policy";
-    prefix pex;  
+    prefix pex;
     organization
         "IETF NMOP";
     contact
@@ -134,7 +135,7 @@ module authz-policy {
         Diego López <mailto:diego.r.lopez@telefonica.com>
         Ana Méndez Pérez <mailto:ana.mendezperez@telefonica.com>";
     description
-        "Illustrative YANG model for representing authorization policies as managed artifacts";  
+        "Illustrative YANG model for representing authorization policies as managed artifacts";
     revision 2026-02-10 {
         description
             "Second revision";
@@ -266,9 +267,9 @@ This document is complementary to that approach. While the OpenConfig model conc
 # Security Considerations
 
 Ensuring the integrity, authenticity, and provenance of policy data is critical to prevent unauthorized modification. Policies SHOULD include cryptographic protection mechanisms that allow their origin and validity to be verified.
- 
+
 The mechanisms defined in {{I-D.ietf-opsawg-yang-provenance}} — Applying COSE Signatures for YANG Data Provenance — provide a suitable foundation for these protections. That document specifies how COSE signatures {{RFC9052}} are used to include digital signatures within the YANG data, enabling, in this case, verifiable provenance and ensuring the integrity of the YANG-based distributed authorization policy sharing model proposed in this draft.
- 
+
 When such provenance mechanisms are applied to policy definitions, each policy instance can include a verifiable signature providing proof of origin and integrity of the provided policy. By treating policies as signed, versioned artifacts, this framework reduces the risk associated with automated and cross-domain policy exchange, including the additional risks in multi-domain deployments such as determining whether a policy has been modified in transit and whether the policy issuer is authorized to define policies applicable to the receiving domain.
 
 # IANA Considerations
