@@ -128,7 +128,9 @@ YANG provides a structured and schema-driven mechanism for representing authoriz
 
 Each policy instance MUST include a semantic version following a controlled versioning scheme (for example, Git-style tags such as `v1.0.0`). Version values MUST uniquely identify immutable policy content. Once a specific version is stored, it MUST NOT be modified. Any change to the policy logic or its governance metadata MUST result in the creation of a new version. Versioning is therefore a fundamental requirement of Policy-as-Code governance. Maintaining historical versions enables controlled updates, rollback to previous versions, auditability, and forensic analysis in case of misconfiguration or dispute.
 
-In addition, each policy instance MUST include an explicit owner attribute identifying the authority responsible for the policy definition establishing accountability across domains. By binding a policy to a clearly identified authority, the framework supports governance controls and enables systems to determine whether a given policy source is authorized within a particular scope.
+In addition, each policy instance MUST include an explicit owner attribute that identifies the authority responsible for the policy definition, ensuring accountability across domains. By associating a policy with a clearly identified authority, the framework enables governance controls and allows systems to determine whether the policy source is authorized within a given scope. The owner attribute MUST be expressed as a URN that uniquely identifies the authoritative entity responsible for the policy.
+
+The specific URN namespace and structure are determined by the administrative environment. Ownership metadata is cryptographically linked to the policy's provenance, enabling verification against the policy's signature key. This mechanism ensures that the policy's origin and integrity can be independently verified and trusted across systems.
 
 The YANG model below illustrates a simplified structure for representing authorization policies as managed artifacts:
 
