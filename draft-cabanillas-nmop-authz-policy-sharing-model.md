@@ -41,7 +41,7 @@ normative:
 
 informative:
  Rego:
-  title: Rego: A Policy Language for Open Policy Agent
+  title: A Policy Language for Open Policy Agent
   target: https://www.openpolicyagent.org/docs/latest/policy-language/
  Cedar:
   title: Cedar Policy Language
