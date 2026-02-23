@@ -41,15 +41,15 @@ normative:
 
 
 informative:
-    Rego:
-        title: Rego: A Policy Language for Open Policy Agent
-        target: https://www.openpolicyagent.org/docs/latest/policy-language/
-    Cedar:
-        title: Cedar Policy Language
-        target: https://docs.cedarpolicy.com/
-    ALFA:
-        title: ALFA (Abbreviated Language For Authorization)
-        target: https://alfa.guide/alfa-authorization-language/
+ Rego:
+  title: Rego: A Policy Language for Open Policy Agent
+  target: https://www.openpolicyagent.org/docs/latest/policy-language/
+ Cedar:
+  title: Cedar Policy Language
+  target: https://docs.cedarpolicy.com/
+ ALFA:
+  title: ALFA (Abbreviated Language For Authorization)
+  target: https://alfa.guide/alfa-authorization-language/
 ...
 
 --- abstract
