@@ -39,7 +39,6 @@ normative:
  RFC9052:
  I-D.ietf-opsawg-yang-provenance: I-D.ietf-opsawg-yang-provenance
 
-
 informative:
  Rego:
   title: Rego: A Policy Language for Open Policy Agent
