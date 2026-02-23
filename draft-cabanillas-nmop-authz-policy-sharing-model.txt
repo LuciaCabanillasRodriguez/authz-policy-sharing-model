@@ -425,12 +425,12 @@ module authz-policy {
    Existing data models demonstrate that YANG can be effectively used to
    carry authorization-related information in operational environments.
 
-   The OpenConfig gNSI authorization model (openconfig-gnsi-authz,
-   version 2024-02-13) defines a YANG module that represents metadata
-   associated with gRPC authorization policies installed on network
-   devices.  That model focuses on device-level state and observability,
-   including policy versioning, creation time, and success/failure
-   counters collected during authorization evaluation.
+   The OpenConfig gNSI authorization model [OpenConfig_gNSI_authz]
+   defines a YANG module that represents metadata associated with gRPC
+   authorization policies installed on network devices.  That model
+   focuses on device-level state and observability, including policy
+   versioning, creation time, and success/failure counters collected
+   during authorization evaluation.
 
    This document is complementary to that approach.  While the
    OpenConfig model concentrates on operational visibility for a
@@ -507,6 +507,11 @@ module authz-policy {
 
    [Cedar]    "Cedar Policy Language", n.d.,
               <https://docs.cedarpolicy.com/>.
+
+   [OpenConfig_gNSI_authz]
+              "OpenConfig gNSI Authorization Model", n.d.,
+              <https://www.netconfcentral.org/modules/openconfig-gnsi-
+              authz/2024-02-13/source/raw/>.
 
    [Rego]     "A Policy Language for Open Policy Agent", n.d.,
               <https://www.openpolicyagent.org/docs/latest/policy-

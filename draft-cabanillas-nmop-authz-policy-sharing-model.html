@@ -1478,7 +1478,7 @@ module authz-policy {
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-other-models" class="section-name selfRef">Other Models</a>
       </h2>
 <p id="section-7-1">Existing data models demonstrate that YANG can be effectively used to carry authorization-related information in operational environments.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">The OpenConfig gNSI authorization model (openconfig-gnsi-authz, version 2024-02-13) defines a YANG module that represents metadata associated with gRPC authorization policies installed on network devices. That model focuses on device-level state and observability, including policy versioning, creation time, and success/failure counters collected during authorization evaluation.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-2">The OpenConfig gNSI authorization model <span>[<a href="#OpenConfig_gNSI_authz" class="cite xref">OpenConfig_gNSI_authz</a>]</span> defines a YANG module that represents metadata associated with gRPC authorization policies installed on network devices. That model focuses on device-level state and observability, including policy versioning, creation time, and success/failure counters collected during authorization evaluation.<a href="#section-7-2" class="pilcrow">¶</a></p>
 <p id="section-7-3">This document is complementary to that approach. While the OpenConfig model concentrates on operational visibility for a specific enforcement technology, the framework defined here focuses on the representation, lifecycle management, provenance, and distribution of authorization policy artifacts across systems and administrative domains.<a href="#section-7-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1547,6 +1547,10 @@ module authz-policy {
 <dt id="Cedar">[Cedar]</dt>
         <dd>
 <span class="refTitle">"Cedar Policy Language"</span>, <span>n.d.</span>, <span>&lt;<a href="https://docs.cedarpolicy.com/">https://docs.cedarpolicy.com/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OpenConfig_gNSI_authz">[OpenConfig_gNSI_authz]</dt>
+        <dd>
+<span class="refTitle">"OpenConfig gNSI Authorization Model"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.netconfcentral.org/modules/openconfig-gnsi-authz/2024-02-13/source/raw/">https://www.netconfcentral.org/modules/openconfig-gnsi-authz/2024-02-13/source/raw/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="Rego">[Rego]</dt>
       <dd>
