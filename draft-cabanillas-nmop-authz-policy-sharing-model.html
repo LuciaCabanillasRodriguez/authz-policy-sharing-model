@@ -1332,9 +1332,10 @@ allow {
 </li>
       </ul>
 <p id="section-5-3">Each policy instance <span class="bcp14">MUST</span> include a semantic version following a controlled versioning scheme (for example, Git-style tags such as <code>v1.0.0</code>). Version values <span class="bcp14">MUST</span> uniquely identify immutable policy content. Once a specific version is stored, it <span class="bcp14">MUST NOT</span> be modified. Any change to the policy logic or its governance metadata <span class="bcp14">MUST</span> result in the creation of a new version. Versioning is therefore a fundamental requirement of Policy-as-Code governance. Maintaining historical versions enables controlled updates, rollback to previous versions, auditability, and forensic analysis in case of misconfiguration or dispute.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">In addition, each policy instance <span class="bcp14">MUST</span> include an explicit owner attribute identifying the authority responsible for the policy definition establishing accountability across domains. By binding a policy to a clearly identified authority, the framework supports governance controls and enables systems to determine whether a given policy source is authorized within a particular scope.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">The YANG model below illustrates a simplified structure for representing authorization policies as managed artifacts:<a href="#section-5-5" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5-6">
+<p id="section-5-4">In addition, each policy instance <span class="bcp14">MUST</span> include an explicit owner attribute that identifies the authority responsible for the policy definition, ensuring accountability across domains. By associating a policy with a clearly identified authority, the framework enables governance controls and allows systems to determine whether the policy source is authorized within a given scope. The owner attribute <span class="bcp14">MUST</span> be expressed as a URN that uniquely identifies the authoritative entity responsible for the policy.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">The specific URN namespace and structure are determined by the administrative environment. Ownership metadata is cryptographically linked to the policy's provenance, enabling verification against the policy's signature key. This mechanism ensures that the policy's origin and integrity can be independently verified and trusted across systems.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-6">The YANG model below illustrates a simplified structure for representing authorization policies as managed artifacts:<a href="#section-5-6" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5-7">
 <pre>
 module authz-policy {
     namespace "urn:ietf:params:xml:ns:yang:authz-policy";
@@ -1399,9 +1400,9 @@ module authz-policy {
         }
     }
 }
-</pre><a href="#section-5-6" class="pilcrow">¶</a>
+</pre><a href="#section-5-7" class="pilcrow">¶</a>
 </div>
-<p id="section-5-7">This YANG snippet demonstrates how policy content can be represented as structured data while keeping the logic in a declarative format. By explicitly indicating the language, management systems can validate and process policies appropriately, enabling interoperability between tools and engines.<a href="#section-5-7" class="pilcrow">¶</a></p>
+<p id="section-5-8">This YANG snippet demonstrates how policy content can be represented as structured data while keeping the logic in a declarative format. By explicitly indicating the language, management systems can validate and process policies appropriately, enabling interoperability between tools and engines.<a href="#section-5-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="architecture-overview">
