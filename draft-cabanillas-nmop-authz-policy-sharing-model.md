@@ -137,7 +137,7 @@ The YANG model below illustrates a simplified structure for representing authori
 ~~~
 module authz-policy {
     namespace "urn:ietf:params:xml:ns:yang:authz-policy";
-    prefix pex;
+    prefix pex;  
     organization
         "IETF NMOP";
     contact
@@ -147,8 +147,11 @@ module authz-policy {
         Lucía Cabanillas <mailto:lucia.cabanillasrodriguez@telefonica.com>
         Diego López <mailto:diego.r.lopez@telefonica.com>
         Ana Méndez Pérez <mailto:ana.mendezperez@telefonica.com>";
+    import ietf-yang-provenance {
+        prefix iyangprov;
+    }
     description
-        "Illustrative YANG model for representing authorization policies as managed artifacts";
+        "Illustrative YANG model for representing authorization policies as managed artifacts";  
     revision 2026-02-10 {
         description
             "Second revision";
@@ -164,20 +167,22 @@ module authz-policy {
         leaf language {
             type enumeration {
                 enum rego {
-                description "The policy is written in Rego syntax";
+                    description "The policy is written in Rego syntax";
                 }
                 enum cedar {
-                description "The policy is written in Cedar syntax";
+                    description "The policy is written in Cedar syntax";
                 }
                 enum alfa {
-                description "The policy is defined in ALFA format";
+                    description "The policy is defined in ALFA format";
                 }
             }
+            mandatory true;
             description
                 "Specifies the language used to express the policy";
         }
-        leaf rule {
+        leaf PaC {
             type string;
+            mandatory true;
             description
                 "Example:    package example
                 # Allow read access if the user has the 'read' role
@@ -187,14 +192,23 @@ module authz-policy {
                 }";
         }
         leaf owner {
-            type string;
+            type string {
+                pattern "urn:[a-zA-Z0-9][a-zA-Z0-9\-.:]+:[a-zA-Z0-9\-.:]+";
+            }
+            mandatory true;
             description
-                "Identifier of the policy owner";
+                "URN identifying the authoritative entity responsible for this policy. Example: urn:org:company:policy-admin";
         }
         leaf version {
             type string;
+            mandatory true;
             description
                 "Semantic version of the policy following Git-style tags (e.g., v1.0.0)";
+        }
+        leaf policy-provenance {
+            type iyangprov:provenance-signature;
+            description
+                "Signature proving provenance of the policy";
         }
     }
 }
