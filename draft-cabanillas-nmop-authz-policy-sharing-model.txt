@@ -19,7 +19,7 @@ Abstract
    authorization policies in distributed and automated environments.  It
    specifies a consistent, machine-readable, and interoperable framework
    that enables policies to be validated, versioned, exchanged, and
-   retired across heterogeneous systems and domains.
+   removed across heterogeneous systems and domains.
 
    The framework defines how authorization policies, expressed in
    declarative Policy-as-Code (PaC) languages, are encapsulated,
@@ -91,7 +91,9 @@ Table of Contents
    7.  Other Models
    8.  Security Considerations
    9.  IANA Considerations
-   10. Normative References
+   10. References
+     10.1.  Normative References
+     10.2.  Informative References
    Acknowledgments
    Authors' Addresses
 
@@ -103,7 +105,7 @@ Table of Contents
    managing authorization policies.  In these environments, policies are
    no longer confined to static configuration files or manually managed.
    Instead, they are dynamic artifacts that must be created, validated,
-   distributed, updated, and retired programmatically.
+   distributed, updated, and eliminated programmatically.
 
    Authorization policies increasingly govern not only access control
    but also operational behavior, compliance requirements, and
@@ -160,7 +162,7 @@ Table of Contents
 
    *  Policy lifecycle: The set of stages through which a policy passes,
       including creation, validation, versioning, distribution, update,
-      and retirement.
+      and removal.
 
    *  Policy-as-Code (PaC): A paradigm in which policies are represented
       as declarative code artifacts, allowing automation, versioning,
@@ -176,7 +178,7 @@ Table of Contents
       conditions.
 
    *  Lifecycle control: Policies MUST support creation, versioning,
-      validation, and retirement.
+      validation, and removal.
 
    *  Interoperability: Policy representations SHOULD be portable and
       interpretable across different administrative domains.
@@ -186,12 +188,12 @@ Table of Contents
 
 4.  Policy-as-Code and Declarative Policy Languages
 
-   Declarative Policy-as-Code (PaC) languages, such as Rego, Cedar, or
-   ALFA, are widely used to express authorization logic in distributed
-   systems.  Although these languages differ in syntax, evaluation
-   models, and execution environments, they share common lifecycle and
-   governance requirements when used in distributed and multi-domain
-   environments.
+   Declarative Policy-as-Code (PaC) languages, such as Rego [Rego],
+   Cedar [Cedar], or ALFA [ALFA], are widely used to express
+   authorization logic in distributed systems.  Although these languages
+   differ in syntax, evaluation models, and execution environments, they
+   share common lifecycle and governance requirements when used in
+   distributed and multi-domain environments.
 
    This framework treats PaC content as opaque executable logic embedded
    within a YANG-defined policy artifact.  The YANG representation does
@@ -360,7 +362,7 @@ module authz-policy {
    authorized to define or modify policies within the relevant domain.
 
    All lifecycle events, including creation, update, activation,
-   rollback, and retirement, MUST be recorded in an append-only
+   rollback, and decommissioning, MUST be recorded in an append-only
    accounting ledger to ensure traceability and auditability.
 
    Once validated and authorized, the PAP distributes the executable
@@ -394,7 +396,7 @@ module authz-policy {
         | Policy Administration Point (PAP) |---->|    Accounting Ledger    |
         |-----------------------------------|     |-------------------------|
         | - Schema validation               |     | - create / update       |
-        | - Provenance verification         |     | - rollback / retire     |
+        | - Provenance verification         |     | - rollback / remove     |
         | - Version enforcement             |     +-------------------------+
         | - Lifecycle state management      |
         |-----------------------------------|
@@ -466,7 +468,9 @@ module authz-policy {
 
    This document has no IANA actions.
 
-10.  Normative References
+10.  References
+
+10.1.  Normative References
 
    [I-D.ietf-opsawg-yang-provenance]
               Lopez, D., Pastor, A., Feng, A. H., Pérez, A. M., and H.
@@ -495,6 +499,18 @@ module authz-policy {
               Structures and Process", STD 96, RFC 9052,
               DOI 10.17487/RFC9052, August 2022,
               <https://www.rfc-editor.org/rfc/rfc9052>.
+
+10.2.  Informative References
+
+   [ALFA]     "ALFA (Abbreviated Language For Authorization)", n.d.,
+              <https://alfa.guide/alfa-authorization-language/>.
+
+   [Cedar]    "Cedar Policy Language", n.d.,
+              <https://docs.cedarpolicy.com/>.
+
+   [Rego]     "A Policy Language for Open Policy Agent", n.d.,
+              <https://www.openpolicyagent.org/docs/latest/policy-
+              language/>.
 
 Acknowledgments
 

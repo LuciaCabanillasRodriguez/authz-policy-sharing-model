@@ -9,7 +9,7 @@
 <meta content="Diego Lopez" name="author">
 <meta content="Ana Mendez" name="author">
 <meta content="
-       This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of authorization policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, versioned, exchanged, and retired across heterogeneous systems and domains. 
+       This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of authorization policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, versioned, exchanged, and removed across heterogeneous systems and domains. 
        The framework defines how authorization policies, expressed in declarative Policy-as-Code (PaC) languages, are encapsulated, managed, and distributed using YANG as the canonical representation format. This separation allows independent evolution of policy languages, enforcement architectures, and trust models. 
     " name="description">
 <meta content="xml2rfc 3.31.0" name="generator">
@@ -1093,7 +1093,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Model for distributed authorization policy sharing</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of authorization policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, versioned, exchanged, and retired across heterogeneous systems and domains.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of authorization policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, versioned, exchanged, and removed across heterogeneous systems and domains.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">The framework defines how authorization policies, expressed in declarative Policy-as-Code (PaC) languages, are encapsulated, managed, and distributed using YANG as the canonical representation format. This separation allows independent evolution of policy languages, enforcement architectures, and trust models.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
@@ -1196,7 +1196,15 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
             <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
@@ -1213,7 +1221,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">The increasing complexity and automation of distributed systems, such as programmable networks, multi-cloud platforms, and intent-based infrastructures, require scalable and interoperable mechanisms for managing authorization policies. In these environments, policies are no longer confined to static configuration files or manually managed. Instead, they are dynamic artifacts that must be created, validated, distributed, updated, and retired programmatically.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">The increasing complexity and automation of distributed systems, such as programmable networks, multi-cloud platforms, and intent-based infrastructures, require scalable and interoperable mechanisms for managing authorization policies. In these environments, policies are no longer confined to static configuration files or manually managed. Instead, they are dynamic artifacts that must be created, validated, distributed, updated, and eliminated programmatically.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">Authorization policies increasingly govern not only access control but also operational behavior, compliance requirements, and governance constraints across multiple domains. These policies may be authored in one domain, distributed through another, and enforced in many. As a result, consistent handling of policies throughout their lifecycle becomes critical.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Existing approaches often rely on system-specific policy formats and ad hoc distribution mechanisms, leading to several challenges:<a href="#section-1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
@@ -1251,7 +1259,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
           <p id="section-2-3.2.1">Authorization policy: A policy that governs access or permissions based on user/agent, resource, or environmental attributes.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.3">
-          <p id="section-2-3.3.1">Policy lifecycle: The set of stages through which a policy passes, including creation, validation, versioning, distribution, update, and retirement.<a href="#section-2-3.3.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.3.1">Policy lifecycle: The set of stages through which a policy passes, including creation, validation, versioning, distribution, update, and removal.<a href="#section-2-3.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.4">
           <p id="section-2-3.4.1">Policy-as-Code (PaC): A paradigm in which policies are represented as declarative code artifacts, allowing automation, versioning, and testing.<a href="#section-2-3.4.1" class="pilcrow">¶</a></p>
@@ -1270,7 +1278,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
           <p id="section-3-2.1.1">Granularity: Policies <span class="bcp14">SHOULD</span> be able to express fine-grained authorization rules over users, resources, and contextual conditions.<a href="#section-3-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-3-2.2">
-          <p id="section-3-2.2.1">Lifecycle control: Policies <span class="bcp14">MUST</span> support creation, versioning, validation, and retirement.<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-3-2.2.1">Lifecycle control: Policies <span class="bcp14">MUST</span> support creation, versioning, validation, and removal.<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-3-2.3">
           <p id="section-3-2.3.1">Interoperability: Policy representations <span class="bcp14">SHOULD</span> be portable and interpretable across different administrative domains.<a href="#section-3-2.3.1" class="pilcrow">¶</a></p>
@@ -1286,7 +1294,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-policy-as-code-and-declarat">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-policy-as-code-and-declarat" class="section-name selfRef">Policy-as-Code and Declarative Policy Languages</a>
       </h2>
-<p id="section-4-1">Declarative Policy-as-Code (PaC) languages, such as Rego, Cedar, or ALFA, are widely used to express authorization logic in distributed systems. Although these languages differ in syntax, evaluation models, and execution environments, they share common lifecycle and governance requirements when used in distributed and multi-domain environments.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">Declarative Policy-as-Code (PaC) languages, such as Rego <span>[<a href="#Rego" class="cite xref">Rego</a>]</span>, Cedar <span>[<a href="#Cedar" class="cite xref">Cedar</a>]</span>, or ALFA <span>[<a href="#ALFA" class="cite xref">ALFA</a>]</span>, are widely used to express authorization logic in distributed systems. Although these languages differ in syntax, evaluation models, and execution environments, they share common lifecycle and governance requirements when used in distributed and multi-domain environments.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <p id="section-4-2">This framework treats PaC content as opaque executable logic embedded within a YANG-defined policy artifact. The YANG representation does not interpret, validate, or constrain the internal semantics of the policy language. Instead, it provides a structured and interoperable container for lifecycle governance, version control, provenance binding, and distribution.<a href="#section-4-2" class="pilcrow">¶</a></p>
 <p id="section-4-3">By separating policy handling from policy semantics, including evaluation logic and decision outcomes, this framework enables interoperability without constraining innovation in policy languages or enforcement technologies.<a href="#section-4-3" class="pilcrow">¶</a></p>
 <p id="section-4-4">Example in Rego syntax:<a href="#section-4-4" class="pilcrow">¶</a></p>
@@ -1411,7 +1419,7 @@ module authz-policy {
 <p id="section-6.1-2">Policy Administration Point (PAP): The Policy Administration Point manages the lifecycle and governance of policy artifacts. Upon receiving a YANG-encoded policy, it performs schema validation and, where applicable, verifies provenance using cryptographic mechanisms such as those described in <span>[<a href="#I-D.ietf-opsawg-yang-provenance" class="cite xref">I-D.ietf-opsawg-yang-provenance</a>]</span>.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.1-3">The PAP enforces version uniqueness and immutability, ensuring that existing versions are never modified. Any change to policy content or metadata results in the creation of a new version. The PAP maintains historical versions to support rollback and audit requirements.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
 <p id="section-6.1-4">Before accepting or distributing a policy artifact, the Policy Administration Point (PAP) <span class="bcp14">MAY</span> perform an authorization verification step. In this step, the PAP queries a Policy Decision Point to determine whether the declared owner or submitting entity is authorized to define or modify policies within the relevant domain.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
-<p id="section-6.1-5">All lifecycle events, including creation, update, activation, rollback, and retirement, <span class="bcp14">MUST</span> be recorded in an append-only accounting ledger to ensure traceability and auditability.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1-5">All lifecycle events, including creation, update, activation, rollback, and decommissioning, <span class="bcp14">MUST</span> be recorded in an append-only accounting ledger to ensure traceability and auditability.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
 <p id="section-6.1-6">Once validated and authorized, the PAP distributes the executable policy artifact to the appropriate decision components.<a href="#section-6.1-6" class="pilcrow">¶</a></p>
 <p id="section-6.1-7">Policy Decision Point (PDP): The Policy Decision Point evaluates policy logic at runtime. It receives validated policy artifacts and processes authorization requests based on contextual attributes, claims, or environmental information. The PDP produces authorization decisions such as Permit or Deny, optionally including obligations or advice.<a href="#section-6.1-7" class="pilcrow">¶</a></p>
 <p id="section-6.1-8">Policy Enforcement Point (PEP): The PEP enforces the decisions issued by the PDP. Enforcement may include granting or denying access, applying configurations, or triggering operational actions.<a href="#section-6.1-8" class="pilcrow">¶</a></p>
@@ -1434,7 +1442,7 @@ module authz-policy {
         | Policy Administration Point (PAP) |----&gt;|    Accounting Ledger    |
         |-----------------------------------|     |-------------------------|
         | - Schema validation               |     | - create / update       |
-        | - Provenance verification         |     | - rollback / retire     |
+        | - Provenance verification         |     | - rollback / remove     |
         | - Version enforcement             |     +-------------------------+
         | - Lifecycle state management      |
         |-----------------------------------|
@@ -1492,33 +1500,61 @@ module authz-policy {
 <p id="section-9-1">This document has no IANA actions.<a href="#section-9-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="sec-normative-references">
+<div id="sec-combined-references">
 <section id="section-10">
-      <h2 id="name-normative-references">
-<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+      <h2 id="name-references">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
+<div id="sec-normative-references">
+<section id="section-10.1">
+        <h3 id="name-normative-references">
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
 <dl class="references">
 <dt id="I-D.ietf-opsawg-yang-provenance">[I-D.ietf-opsawg-yang-provenance]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Lopez, D.</span>, <span class="refAuthor">Pastor, A.</span>, <span class="refAuthor">Feng, A. H.</span>, <span class="refAuthor">Pérez, A. M.</span>, and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"Applying COSE Signatures for YANG Data Provenance"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-opsawg-yang-provenance-03</span>, <time datetime="2025-11-03" class="refDate">3 November 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-opsawg-yang-provenance-03">https://datatracker.ietf.org/doc/html/draft-ietf-opsawg-yang-provenance-03</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2904">[RFC2904]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Vollbrecht, J.</span>, <span class="refAuthor">Calhoun, P.</span>, <span class="refAuthor">Farrell, S.</span>, <span class="refAuthor">Gommans, L.</span>, <span class="refAuthor">Gross, G.</span>, <span class="refAuthor">de Bruijn, B.</span>, <span class="refAuthor">de Laat, C.</span>, <span class="refAuthor">Holdrege, M.</span>, and <span class="refAuthor">D. Spence</span>, <span class="refTitle">"AAA Authorization Framework"</span>, <span class="seriesInfo">RFC 2904</span>, <span class="seriesInfo">DOI 10.17487/RFC2904</span>, <time datetime="2000-08" class="refDate">August 2000</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2904">https://www.rfc-editor.org/rfc/rfc2904</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9052">[RFC9052]</dt>
-    <dd>
+      <dd>
 <span class="refAuthor">Schaad, J.</span>, <span class="refTitle">"CBOR Object Signing and Encryption (COSE): Structures and Process"</span>, <span class="seriesInfo">STD 96</span>, <span class="seriesInfo">RFC 9052</span>, <span class="seriesInfo">DOI 10.17487/RFC9052</span>, <time datetime="2022-08" class="refDate">August 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9052">https://www.rfc-editor.org/rfc/rfc9052</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-10.2">
+        <h3 id="name-informative-references">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="ALFA">[ALFA]</dt>
+        <dd>
+<span class="refTitle">"ALFA (Abbreviated Language For Authorization)"</span>, <span>n.d.</span>, <span>&lt;<a href="https://alfa.guide/alfa-authorization-language/">https://alfa.guide/alfa-authorization-language/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="Cedar">[Cedar]</dt>
+        <dd>
+<span class="refTitle">"Cedar Policy Language"</span>, <span>n.d.</span>, <span>&lt;<a href="https://docs.cedarpolicy.com/">https://docs.cedarpolicy.com/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="Rego">[Rego]</dt>
+      <dd>
+<span class="refTitle">"A Policy Language for Open Policy Agent"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.openpolicyagent.org/docs/latest/policy-language/">https://www.openpolicyagent.org/docs/latest/policy-language/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
 </section>
 </div>
 <div id="acknowledgments">
