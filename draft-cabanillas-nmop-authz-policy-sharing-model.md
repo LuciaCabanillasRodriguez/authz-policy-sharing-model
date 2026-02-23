@@ -49,6 +49,9 @@ informative:
  ALFA:
   title: ALFA (Abbreviated Language For Authorization)
   target: https://alfa.guide/alfa-authorization-language/
+ OpenConfig_gNSI_authz:
+  title: OpenConfig gNSI Authorization Model
+  target: https://www.netconfcentral.org/modules/openconfig-gnsi-authz/2024-02-13/source/raw/
 ...
 
 --- abstract
@@ -264,7 +267,7 @@ The following diagram illustrates the logical interaction flow:
 
 Existing data models demonstrate that YANG can be effectively used to carry authorization-related information in operational environments.
 
-The OpenConfig gNSI authorization model (openconfig-gnsi-authz, version 2024-02-13) defines a YANG module that represents metadata associated with gRPC authorization policies installed on network devices. That model focuses on device-level state and observability, including policy versioning, creation time, and success/failure counters collected during authorization evaluation.
+The OpenConfig gNSI authorization model {{OpenConfig_gNSI_authz}} defines a YANG module that represents metadata associated with gRPC authorization policies installed on network devices. That model focuses on device-level state and observability, including policy versioning, creation time, and success/failure counters collected during authorization evaluation.
 
 This document is complementary to that approach. While the OpenConfig model concentrates on operational visibility for a specific enforcement technology, the framework defined here focuses on the representation, lifecycle management, provenance, and distribution of authorization policy artifacts across systems and administrative domains.
 
