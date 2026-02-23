@@ -5,8 +5,8 @@
 Network Management Operations                            L. C. Rodríguez
 Internet-Draft                                                  D. Lopez
 Intended status: Informational                                 A. Mendez
-Expires: 23 August 2026                                       Telefónica
-                                                        19 February 2026
+Expires: 27 August 2026                                       Telefónica
+                                                        23 February 2026
 
 
            Model for distributed authorization policy sharing
@@ -62,7 +62,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 August 2026.
+   This Internet-Draft will expire on 27 August 2026.
 
 Copyright Notice
 
@@ -181,7 +181,7 @@ Table of Contents
    *  Interoperability: Policy representations SHOULD be portable and
       interpretable across different administrative domains.
 
-   *  Trust support: The framework MUST support mechanisms to verify
+   *  Verifiability: The framework MUST provide mechanisms to verify
       policy integrity and provenance.
 
 4.  Policy-as-Code and Declarative Policy Languages
@@ -207,8 +207,12 @@ Table of Contents
 
    Example in Rego syntax:
 
-   package example # Allow read access if the user has the "read" role
-   default allow = false allow { input.user.role == "read" }
+   package example
+   # Allow read access if the user has the "read" role
+   default allow = false
+   allow {
+       input.user.role == "read"
+   }
 
    The policy logic above is treated as opaque content by the YANG
    representation.  Its evaluation behavior is determined exclusively by
@@ -228,7 +232,7 @@ Table of Contents
 
    *  The embedded Policy-as-Code (PaC) content, treated as opaque data.
 
-   *  Optional extensions for validation and provenance.
+   *  Optional leaf for validation and provenance.
 
    Each policy instance MUST include a semantic version following a
    controlled versioning scheme (for example, Git-style tags such as
@@ -251,29 +255,69 @@ Table of Contents
    The YANG model below illustrates a simplified structure for
    representing authorization policies as managed artifacts:
 
-   module authz-policy { namespace "urn:ietf:params:xml:ns:yang:authz-
-   policy"; prefix pex; organization "IETF NMOP"; contact "WG Web:
-   <https://datatracker.ietf.org/wg/nmop/> WG List:
-   <mailto:nmop@ietf.org> Authors: Lucía Cabanillas
-   <mailto:lucia.cabanillasrodriguez@telefonica.com> Diego López
-   <mailto:diego.r.lopez@telefonica.com> Ana Méndez Pérez
-   <mailto:ana.mendezperez@telefonica.com>"; description "Illustrative
-   YANG model for representing authorization policies as managed
-   artifacts"; revision 2026-02-10 { description "Second revision";
-   reference "RFC XXXX: Model for distributed authorization policy
-   sharing"; } container policy { leaf description { type string;
-   description "Optional human-readable description of the policy"; }
-   leaf language { type enumeration { enum rego { description "The
-   policy is written in Rego syntax"; } enum cedar { description "The
-   policy is written in Cedar syntax"; } enum alfa { description "The
-   policy is defined in ALFA format"; } } description "Specifies the
-   language used to express the policy"; } leaf rule { type string;
-   description "Example: package example # Allow read access if the user
-   has the 'read' role default allow = false allow { input.user.role
-   ==\"read\" }"; } leaf owner { type string; description "Identifier of
-   the policy owner"; } leaf version { type string; description
-   "Semantic version of the policy following Git-style tags (e.g.,
-   v1.0.0)"; } } }
+module authz-policy {
+    namespace "urn:ietf:params:xml:ns:yang:authz-policy";
+    prefix pex;
+    organization
+        "IETF NMOP";
+    contact
+        "WG Web:   <https://datatracker.ietf.org/wg/nmop/>
+        WG List:  <mailto:nmop@ietf.org>
+    Authors:
+        Lucía Cabanillas <mailto:lucia.cabanillasrodriguez@telefonica.com>
+        Diego López <mailto:diego.r.lopez@telefonica.com>
+        Ana Méndez Pérez <mailto:ana.mendezperez@telefonica.com>";
+    description
+        "Illustrative YANG model for representing authorization policies as managed artifacts";
+    revision 2026-02-10 {
+        description
+            "Second revision";
+        reference
+            "RFC XXXX: Model for distributed authorization policy sharing";
+     }
+    container policy {
+        leaf description {
+            type string;
+            description
+                "Optional human-readable description of the policy";
+        }
+        leaf language {
+            type enumeration {
+                enum rego {
+                description "The policy is written in Rego syntax";
+                }
+                enum cedar {
+                description "The policy is written in Cedar syntax";
+                }
+                enum alfa {
+                description "The policy is defined in ALFA format";
+                }
+            }
+            description
+                "Specifies the language used to express the policy";
+        }
+        leaf rule {
+            type string;
+            description
+                "Example:    package example
+                # Allow read access if the user has the 'read' role
+                default allow = false
+                allow {
+                    input.user.role ==\"read\"
+                }";
+        }
+        leaf owner {
+            type string;
+            description
+                "Identifier of the policy owner";
+        }
+        leaf version {
+            type string;
+            description
+                "Semantic version of the policy following Git-style tags (e.g., v1.0.0)";
+        }
+    }
+}
 
    This YANG snippet demonstrates how policy content can be represented
    as structured data while keeping the logic in a declarative format.
@@ -342,24 +386,37 @@ Table of Contents
 
    The following diagram illustrates the logical interaction flow:
 
-   ``` Policy Author | | YANG-encoded policy artifact v
-   +-----------------------------------+ +-------------------------+ |
-   Policy Administration Point (PAP) |---->| Accounting Ledger | |------
-   -----------------------------| |-------------------------| | - Schema
-   validation | | - create / update | | - Provenance verification | | -
-   rollback / retire | | - Version enforcement |
-   +-------------------------+ | - Lifecycle state
-   management | |-----------------------------------| | Governance
-   Authorization Check | | (PAP -> PDP query) |
-   +------------------+----------------+ | | Authorized policy v
-   +-----------------------------------+ | Policy Decision Point
-   (PDP) | |-----------------------------------| | - Runtime policy
-   evaluation | +------------------+----------------+ | | Authorization
-   decision v +-----------------------------------+ | Policy Enforcement
-   Point (PEP) | |-----------------------------------| | - Enforcement
-   of decisions | +-----------------------------------+
-
-   ```
+                     Policy Author
+                           |
+                           |  YANG-encoded policy artifact
+                           v
+        +-----------------------------------+     +-------------------------+
+        | Policy Administration Point (PAP) |---->|    Accounting Ledger    |
+        |-----------------------------------|     |-------------------------|
+        | - Schema validation               |     | - create / update       |
+        | - Provenance verification         |     | - rollback / retire     |
+        | - Version enforcement             |     +-------------------------+
+        | - Lifecycle state management      |
+        |-----------------------------------|
+        |  Governance Authorization Check   |
+        |  (PAP -> PDP query)               |
+        +------------------+----------------+
+                           |
+                           |  Authorized policy
+                           v
+              +-----------------------------------+
+              | Policy Decision Point (PDP)       |
+              |-----------------------------------|
+              | - Runtime policy evaluation       |
+              +------------------+----------------+
+                                 |
+                                 |  Authorization decision
+                                 v
+              +-----------------------------------+
+              | Policy Enforcement Point (PEP)    |
+              |-----------------------------------|
+              | - Enforcement of decisions        |
+              +-----------------------------------+
 
 7.  Other Models
 
