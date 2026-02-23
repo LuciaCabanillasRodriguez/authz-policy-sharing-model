@@ -83,7 +83,7 @@ Systems that manage or exchange authorization policies across domains MUST satis
 * Granularity: Policies SHOULD be able to express fine-grained authorization rules over users, resources, and contextual conditions.
 * Lifecycle control: Policies MUST support creation, versioning, validation, and retirement.
 * Interoperability: Policy representations SHOULD be portable and interpretable across different administrative domains.
-* Trust support: The framework MUST support mechanisms to verify policy integrity and provenance.
+* Verifiability: The framework MUST provide mechanisms to verify policy integrity and provenance.
 
 # Policy-as-Code and Declarative Policy Languages
 
@@ -95,14 +95,14 @@ By separating policy handling from policy semantics, including evaluation logic 
 
 Example in Rego syntax:
 
-```
+~~~
 package example
 # Allow read access if the user has the "read" role
 default allow = false
 allow {
     input.user.role == "read"
 }
-```
+~~~
 
 The policy logic above is treated as opaque content by the YANG representation. Its evaluation behavior is determined exclusively by the target execution environment, while lifecycle and governance properties such as version and ownership are managed independently.
 
@@ -113,7 +113,7 @@ YANG provides a structured and schema-driven mechanism for representing authoriz
 * Policy metadata, including owner, description and version.
 * The declarative language used to express the policy logic.
 * The embedded Policy-as-Code (PaC) content, treated as opaque data.
-* Optional extensions for validation and provenance.
+* Optional leaf for validation and provenance.
 
 Each policy instance MUST include a semantic version following a controlled versioning scheme (for example, Git-style tags such as `v1.0.0`). Version values MUST uniquely identify immutable policy content. Once a specific version is stored, it MUST NOT be modified. Any change to the policy logic or its governance metadata MUST result in the creation of a new version. Versioning is therefore a fundamental requirement of Policy-as-Code governance. Maintaining historical versions enables controlled updates, rollback to previous versions, auditability, and forensic analysis in case of misconfiguration or dispute.
 
@@ -121,7 +121,7 @@ In addition, each policy instance MUST include an explicit owner attribute ident
 
 The YANG model below illustrates a simplified structure for representing authorization policies as managed artifacts:
 
-```
+~~~
 module authz-policy {
     namespace "urn:ietf:params:xml:ns:yang:authz-policy";
     prefix pex;
@@ -185,7 +185,7 @@ module authz-policy {
         }
     }
 }
-```
+~~~
 
 This YANG snippet demonstrates how policy content can be represented as structured data while keeping the logic in a declarative format. By explicitly indicating the language, management systems can validate and process policies appropriately, enabling interoperability between tools and engines.
 
@@ -217,7 +217,7 @@ The interaction among the architectural components reflects a strict separation 
 
 The following diagram illustrates the logical interaction flow:
 
-```
+~~~
                      Policy Author
                            |
                            |  YANG-encoded policy artifact
@@ -250,7 +250,7 @@ The following diagram illustrates the logical interaction flow:
               | - Enforcement of decisions        |
               +-----------------------------------+
 
-```
+~~~
 
 # Other Models
 
