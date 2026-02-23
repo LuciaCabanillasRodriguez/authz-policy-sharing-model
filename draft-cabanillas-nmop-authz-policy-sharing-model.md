@@ -35,16 +35,25 @@ author:
    email: "ana.mendezperez@telefonica.com"
 
 normative:
+ RFC2904:
  RFC9052:
  I-D.ietf-opsawg-yang-provenance: I-D.ietf-opsawg-yang-provenance
- RFC2904:
+
 
 informative:
-
+    Rego:
+        title: Rego: A Policy Language for Open Policy Agent
+        target: https://www.openpolicyagent.org/docs/latest/policy-language/
+    Cedar:
+        title: Cedar Policy Language
+        target: https://docs.cedarpolicy.com/
+    ALFA:
+        title: ALFA (Abbreviated Language For Authorization)
+        target: https://alfa.guide/alfa-authorization-language/
 ...
 
 --- abstract
-This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of authorization policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, versioned, exchanged, and retired across heterogeneous systems and domains.
+This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of authorization policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, versioned, exchanged, and removed across heterogeneous systems and domains.
 
 The framework defines how authorization policies, expressed in declarative Policy-as-Code (PaC) languages, are encapsulated, managed, and distributed using YANG as the canonical representation format. This separation allows independent evolution of policy languages, enforcement architectures, and trust models.
 
@@ -52,7 +61,7 @@ The framework defines how authorization policies, expressed in declarative Polic
 
 # Introduction
 
-The increasing complexity and automation of distributed systems, such as programmable networks, multi-cloud platforms, and intent-based infrastructures, require scalable and interoperable mechanisms for managing authorization policies. In these environments, policies are no longer confined to static configuration files or manually managed. Instead, they are dynamic artifacts that must be created, validated, distributed, updated, and retired programmatically.
+The increasing complexity and automation of distributed systems, such as programmable networks, multi-cloud platforms, and intent-based infrastructures, require scalable and interoperable mechanisms for managing authorization policies. In these environments, policies are no longer confined to static configuration files or manually managed. Instead, they are dynamic artifacts that must be created, validated, distributed, updated, and eliminated programmatically.
 
 Authorization policies increasingly govern not only access control but also operational behavior, compliance requirements, and governance constraints across multiple domains. These policies may be authored in one domain, distributed through another, and enforced in many. As a result, consistent handling of policies throughout their lifecycle becomes critical.
 
@@ -73,7 +82,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 * Policy: A rule or set of rules that define behavior, access, or operational constraints within a system.
 * Authorization policy: A policy that governs access or permissions based on user/agent, resource, or environmental attributes.
-* Policy lifecycle: The set of stages through which a policy passes, including creation, validation, versioning, distribution, update, and retirement.
+* Policy lifecycle: The set of stages through which a policy passes, including creation, validation, versioning, distribution, update, and removal.
 * Policy-as-Code (PaC): A paradigm in which policies are represented as declarative code artifacts, allowing automation, versioning, and testing.
 
 # Requirements for Policy Management
@@ -81,13 +90,13 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 Systems that manage or exchange authorization policies across domains MUST satisfy the following requirements:
 
 * Granularity: Policies SHOULD be able to express fine-grained authorization rules over users, resources, and contextual conditions.
-* Lifecycle control: Policies MUST support creation, versioning, validation, and retirement.
+* Lifecycle control: Policies MUST support creation, versioning, validation, and removal.
 * Interoperability: Policy representations SHOULD be portable and interpretable across different administrative domains.
 * Verifiability: The framework MUST provide mechanisms to verify policy integrity and provenance.
 
 # Policy-as-Code and Declarative Policy Languages
 
-Declarative Policy-as-Code (PaC) languages, such as Rego, Cedar, or ALFA, are widely used to express authorization logic in distributed systems. Although these languages differ in syntax, evaluation models, and execution environments, they share common lifecycle and governance requirements when used in distributed and multi-domain environments.
+Declarative Policy-as-Code (PaC) languages, such as Rego {{Rego}}, Cedar {{Cedar}}, or ALFA {{ALFA}}, are widely used to express authorization logic in distributed systems. Although these languages differ in syntax, evaluation models, and execution environments, they share common lifecycle and governance requirements when used in distributed and multi-domain environments.
 
 This framework treats PaC content as opaque executable logic embedded within a YANG-defined policy artifact. The YANG representation does not interpret, validate, or constrain the internal semantics of the policy language. Instead, it provides a structured and interoperable container for lifecycle governance, version control, provenance binding, and distribution.
 
@@ -203,7 +212,7 @@ The PAP enforces version uniqueness and immutability, ensuring that existing ver
 
 Before accepting or distributing a policy artifact, the Policy Administration Point (PAP) MAY perform an authorization verification step. In this step, the PAP queries a Policy Decision Point to determine whether the declared owner or submitting entity is authorized to define or modify policies within the relevant domain.
 
-All lifecycle events, including creation, update, activation, rollback, and retirement, MUST be recorded in an append-only accounting ledger to ensure traceability and auditability.
+All lifecycle events, including creation, update, activation, rollback, and decommissioning, MUST be recorded in an append-only accounting ledger to ensure traceability and auditability.
 
 Once validated and authorized, the PAP distributes the executable policy artifact to the appropriate decision components.
 
@@ -226,7 +235,7 @@ The following diagram illustrates the logical interaction flow:
         | Policy Administration Point (PAP) |---->|    Accounting Ledger    |
         |-----------------------------------|     |-------------------------|
         | - Schema validation               |     | - create / update       |
-        | - Provenance verification         |     | - rollback / retire     |
+        | - Provenance verification         |     | - rollback / remove     |
         | - Version enforcement             |     +-------------------------+
         | - Lifecycle state management      |
         |-----------------------------------|
