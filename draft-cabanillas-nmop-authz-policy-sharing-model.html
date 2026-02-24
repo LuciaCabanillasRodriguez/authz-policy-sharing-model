@@ -1054,7 +1054,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rodríguez, et al.</td>
-<td class="center">Expires 27 August 2026</td>
+<td class="center">Expires 28 August 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-cabanillas-nmop-authz-policy-sharing-model-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-02-23" class="published">23 February 2026</time>
+<time datetime="2026-02-24" class="published">24 February 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-08-27">27 August 2026</time></dd>
+<dd class="expires"><time datetime="2026-08-28">28 August 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1131,7 +1131,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 27 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 28 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1332,14 +1332,14 @@ allow {
 </li>
       </ul>
 <p id="section-5-3">Each policy instance <span class="bcp14">MUST</span> include a semantic version following a controlled versioning scheme (for example, Git-style tags such as <code>v1.0.0</code>). Version values <span class="bcp14">MUST</span> uniquely identify immutable policy content. Once a specific version is stored, it <span class="bcp14">MUST NOT</span> be modified. Any change to the policy logic or its governance metadata <span class="bcp14">MUST</span> result in the creation of a new version. Versioning is therefore a fundamental requirement of Policy-as-Code governance. Maintaining historical versions enables controlled updates, rollback to previous versions, auditability, and forensic analysis in case of misconfiguration or dispute.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">In addition, each policy instance <span class="bcp14">MUST</span> include an explicit owner attribute that identifies the authority responsible for the policy definition, ensuring accountability across domains. By associating a policy with a clearly identified authority, the framework enables governance controls and allows systems to determine whether the policy source is authorized within a given scope. The owner attribute <span class="bcp14">MUST</span> be expressed as a URN that uniquely identifies the authoritative entity responsible for the policy.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">The specific URN namespace and structure are determined by the administrative environment. Ownership metadata is cryptographically linked to the policy's provenance, enabling verification against the policy's signature key. This mechanism ensures that the policy's origin and integrity can be independently verified and trusted across systems.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-4">In addition, each policy instance <span class="bcp14">MUST</span> include an explicit owner attribute that identifies the authority responsible for the policy definition, ensuring accountability within and across domains. By associating a policy with a clearly identified authority, the framework enables governance controls and allows systems to determine whether the policy source is authorized within a given scope. The owner attribute <span class="bcp14">MUST</span> be expressed as a URI that uniquely identifies the authoritative entity responsible for the policy.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-5">The specific URI structure is determined by the administrative environment. Ownership metadata <span class="bcp14">MAY</span> be cryptographically linked to the policy provenance, enabling verification against the provenance signature key. This mechanism ensures that the policy origin and integrity can be independently verified and trusted.<a href="#section-5-5" class="pilcrow">¶</a></p>
 <p id="section-5-6">The YANG model below illustrates a simplified structure for representing authorization policies as managed artifacts:<a href="#section-5-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5-7">
 <pre>
 module authz-policy {
     namespace "urn:ietf:params:xml:ns:yang:authz-policy";
-    prefix pex;
+    prefix pac;
     organization
         "IETF NMOP";
     contact
@@ -1382,7 +1382,7 @@ module authz-policy {
             description
                 "Specifies the language used to express the policy";
         }
-        leaf PaC {
+        leaf pac {
             type string;
             mandatory true;
             description
@@ -1394,12 +1394,10 @@ module authz-policy {
                 }";
         }
         leaf owner {
-            type string {
-                pattern "urn:[a-zA-Z0-9][a-zA-Z0-9\-.:]+:[a-zA-Z0-9\-.:]+";
-            }
+            type uri;
             mandatory true;
             description
-                "URN identifying the authoritative entity responsible for this policy. Example: urn:org:company:policy-admin";
+                "URI identifying the authoritative entity responsible for this policy";
         }
         leaf version {
             type string;
@@ -1493,7 +1491,7 @@ module authz-policy {
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-other-models" class="section-name selfRef">Other Models</a>
       </h2>
 <p id="section-7-1">Existing data models demonstrate that YANG can be effectively used to carry authorization-related information in operational environments.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">The OpenConfig gNSI authorization model <span>[<a href="#OpenConfig_gNSI_authz" class="cite xref">OpenConfig_gNSI_authz</a>]</span> defines a YANG module that represents metadata associated with gRPC authorization policies installed on network devices. That model focuses on device-level state and observability, including policy versioning, creation time, and success/failure counters collected during authorization evaluation.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-2">The OpenConfig gNSI authorization model <span>[<a href="#OCgNSI" class="cite xref">OCgNSI</a>]</span> defines a YANG module that represents metadata associated with gRPC authorization policies installed on network devices. That model focuses on device-level state and observability, including policy versioning, creation time, and success/failure counters collected during authorization evaluation.<a href="#section-7-2" class="pilcrow">¶</a></p>
 <p id="section-7-3">This document is complementary to that approach. While the OpenConfig model concentrates on operational visibility for a specific enforcement technology, the framework defined here focuses on the representation, lifecycle management, provenance, and distribution of authorization policy artifacts across systems and administrative domains.<a href="#section-7-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1563,7 +1561,7 @@ module authz-policy {
         <dd>
 <span class="refTitle">"Cedar Policy Language"</span>, <span>n.d.</span>, <span>&lt;<a href="https://docs.cedarpolicy.com/">https://docs.cedarpolicy.com/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="OpenConfig_gNSI_authz">[OpenConfig_gNSI_authz]</dt>
+<dt id="OCgNSI">[OCgNSI]</dt>
         <dd>
 <span class="refTitle">"OpenConfig gNSI Authorization Model"</span>, <span>n.d.</span>, <span>&lt;<a href="https://www.netconfcentral.org/modules/openconfig-gnsi-authz/2024-02-13/source/raw/">https://www.netconfcentral.org/modules/openconfig-gnsi-authz/2024-02-13/source/raw/</a>&gt;</span>. </dd>
 <dd class="break"></dd>
