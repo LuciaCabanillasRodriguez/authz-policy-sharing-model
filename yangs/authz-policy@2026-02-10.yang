@@ -1,6 +1,6 @@
 module authz-policy {
     namespace "urn:ietf:params:xml:ns:yang:authz-policy";
-    prefix pex;
+    prefix pac;
     organization
         "IETF NMOP";
     contact
@@ -43,7 +43,7 @@ module authz-policy {
             description
                 "Specifies the language used to express the policy";
         }
-        leaf PaC {
+        leaf pac {
             type string;
             mandatory true;
             description
@@ -55,12 +55,10 @@ module authz-policy {
                 }";
         }
         leaf owner {
-            type string {
-                pattern "urn:[a-zA-Z0-9][a-zA-Z0-9\-.:]+:[a-zA-Z0-9\-.:]+";
-            }
+            type uri;
             mandatory true;
             description
-                "URN identifying the authoritative entity responsible for this policy. Example: urn:org:company:policy-admin";
+                "URI identifying the authoritative entity responsible for this policy";
         }
         leaf version {
             type string;

@@ -49,7 +49,7 @@ informative:
  ALFA:
   title: ALFA (Abbreviated Language For Authorization)
   target: https://alfa.guide/alfa-authorization-language/
- OpenConfig_gNSI_authz:
+ OCgNSI:
   title: OpenConfig gNSI Authorization Model
   target: https://www.netconfcentral.org/modules/openconfig-gnsi-authz/2024-02-13/source/raw/
 ...
@@ -128,16 +128,16 @@ YANG provides a structured and schema-driven mechanism for representing authoriz
 
 Each policy instance MUST include a semantic version following a controlled versioning scheme (for example, Git-style tags such as `v1.0.0`). Version values MUST uniquely identify immutable policy content. Once a specific version is stored, it MUST NOT be modified. Any change to the policy logic or its governance metadata MUST result in the creation of a new version. Versioning is therefore a fundamental requirement of Policy-as-Code governance. Maintaining historical versions enables controlled updates, rollback to previous versions, auditability, and forensic analysis in case of misconfiguration or dispute.
 
-In addition, each policy instance MUST include an explicit owner attribute that identifies the authority responsible for the policy definition, ensuring accountability across domains. By associating a policy with a clearly identified authority, the framework enables governance controls and allows systems to determine whether the policy source is authorized within a given scope. The owner attribute MUST be expressed as a URN that uniquely identifies the authoritative entity responsible for the policy.
+In addition, each policy instance MUST include an explicit owner attribute that identifies the authority responsible for the policy definition, ensuring accountability within and across domains. By associating a policy with a clearly identified authority, the framework enables governance controls and allows systems to determine whether the policy source is authorized within a given scope. The owner attribute MUST be expressed as a URI that uniquely identifies the authoritative entity responsible for the policy.
 
-The specific URN namespace and structure are determined by the administrative environment. Ownership metadata is cryptographically linked to the policy's provenance, enabling verification against the policy's signature key. This mechanism ensures that the policy's origin and integrity can be independently verified and trusted across systems.
+The specific URI structure is determined by the administrative environment. Ownership metadata MAY be cryptographically linked to the policy provenance, enabling verification against the provenance signature key. This mechanism ensures that the policy origin and integrity can be independently verified and trusted.
 
 The YANG model below illustrates a simplified structure for representing authorization policies as managed artifacts:
 
 ~~~
 module authz-policy {
     namespace "urn:ietf:params:xml:ns:yang:authz-policy";
-    prefix pex;
+    prefix pac;
     organization
         "IETF NMOP";
     contact
@@ -180,7 +180,7 @@ module authz-policy {
             description
                 "Specifies the language used to express the policy";
         }
-        leaf PaC {
+        leaf pac {
             type string;
             mandatory true;
             description
@@ -192,12 +192,10 @@ module authz-policy {
                 }";
         }
         leaf owner {
-            type string {
-                pattern "urn:[a-zA-Z0-9][a-zA-Z0-9\-.:]+:[a-zA-Z0-9\-.:]+";
-            }
+            type uri;
             mandatory true;
             description
-                "URN identifying the authoritative entity responsible for this policy. Example: urn:org:company:policy-admin";
+                "URI identifying the authoritative entity responsible for this policy";
         }
         leaf version {
             type string;
@@ -283,7 +281,7 @@ The following diagram illustrates the logical interaction flow:
 
 Existing data models demonstrate that YANG can be effectively used to carry authorization-related information in operational environments.
 
-The OpenConfig gNSI authorization model {{OpenConfig_gNSI_authz}} defines a YANG module that represents metadata associated with gRPC authorization policies installed on network devices. That model focuses on device-level state and observability, including policy versioning, creation time, and success/failure counters collected during authorization evaluation.
+The OpenConfig gNSI authorization model {{OCgNSI}} defines a YANG module that represents metadata associated with gRPC authorization policies installed on network devices. That model focuses on device-level state and observability, including policy versioning, creation time, and success/failure counters collected during authorization evaluation.
 
 This document is complementary to that approach. While the OpenConfig model concentrates on operational visibility for a specific enforcement technology, the framework defined here focuses on the representation, lifecycle management, provenance, and distribution of authorization policy artifacts across systems and administrative domains.
 
