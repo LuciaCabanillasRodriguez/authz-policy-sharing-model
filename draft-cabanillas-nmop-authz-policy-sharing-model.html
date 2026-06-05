@@ -9,27 +9,28 @@
 <meta content="Diego Lopez" name="author">
 <meta content="Ana Mendez" name="author">
 <meta content="
-       This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of authorization policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, versioned, exchanged, and removed across heterogeneous systems and domains. 
+       This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of authorization policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, exchanged, and removed across heterogeneous systems and areas. 
        The framework defines how authorization policies, expressed in declarative Policy-as-Code (PaC) languages, are encapsulated, managed, and distributed using YANG as the canonical representation format. This separation allows independent evolution of policy languages, enforcement architectures, and trust models. 
+       The model also defines extensible Policy-as-Code language identities using YANG identity and identityref mechanisms, enabling future policy languages to be incorporated without modifying the core schema. 
     " name="description">
-<meta content="xml2rfc 3.31.0" name="generator">
+<meta content="xml2rfc 3.33.0" name="generator">
 <meta content="policy" name="keyword">
 <meta content="authorization" name="keyword">
 <meta content="lifecycle" name="keyword">
 <meta content="draft-cabanillas-nmop-authz-policy-sharing-model-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.31.0
-    Python 3.12.12
+  xml2rfc 3.33.0
+    Python 3.12.13
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.0.2
-    platformdirs 4.5.1
+    platformdirs 4.9.6
     pycountry 24.6.1
     PyYAML 6.0.3
-    requests 2.32.5
-    wcwidth 0.3.0
+    requests 2.33.1
+    wcwidth 0.7.0
 -->
 <link href="draft-cabanillas-nmop-authz-policy-sharing-model.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -296,16 +297,19 @@ h1, h2, h3, h4, h5, h6 {
   font-size-adjust: 0.5;
   color: var(--title-color);
 }
-h1#title {
-  font-size: 32px;
-  line-height: 40px;
-  clear: both;
-}
-h1#title, h1#rfcnum {
-  margin: 1.5em 0 0.2em;
-}
-h1#rfcnum + h1#title {
-  margin: 0.2em 0;
+h1 {
+  &#title {
+    font-size: 32px;
+    line-height: 40px;
+    clear: both;
+    margin: 1.5em 0 0.2em;
+  }
+  &#rfcnum {
+    margin: 1.5em 0 0.2em;
+    & + h1#title {
+      margin: 0.2em 0;
+    }
+  }
 }
 
 h1, h2, h3 {
@@ -325,10 +329,10 @@ h4, h5, h6 {
 #abstract+p {
   font-size: 18px;
   line-height: 24px;
-}
-#abstract+p code, #abstract+p samp, #abstract+p tt {
-  font-size: 16px;
-  line-height: 0;
+  & code, & samp, & tt {
+    font-size: 16px;
+    line-height: 0;
+  }
 }
 
 p {
@@ -339,59 +343,59 @@ p {
 div {
   margin: 0;
 }
-.alignRight.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignRight.art-text pre {
-  padding: 0;
-  width: auto;
-}
 .alignRight {
   margin: 1em 0;
-}
-.alignRight > *:first-child {
-  border: none;
-  margin: 0;
-  float: right;
-  clear: both;
-}
-.alignRight > *:nth-child(2) {
-  clear: both;
-  display: block;
-  border: none;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    margin: 0;
+    float: right;
+    clear: both;
+  }
+  & > *:nth-child(2) {
+    clear: both;
+    display: block;
+    border: none;
+  }
 }
 svg {
   display: block;
-}
-/* font-family isn't space-separated, but =~ will have to do */
-svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
-  font-family: var(--font-mono);
-}
-.alignCenter.art-text {
-  background-color: var(--highlight-color);
-  border: 1px solid var(--line-color);
-  border-radius: 3px;
-  padding: 0.5em 1em 0;
-  margin-bottom: 0.5em;
-}
-.alignCenter.art-text pre {
-  padding: 0;
-  width: auto;
+  /* font-family isn't space-separated, but =~ will have to do */
+  &[font-family~="monospace" i], & [font-family~="monospace" i] {
+    font-family: var(--font-mono);
+  }
 }
 .alignCenter {
   margin: 1em 0;
-}
-.alignCenter > *:first-child {
-  border: none;
-  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
-     support flexbox yet.
-  */
-  display: table;
-  margin: 0 auto;
+  &.art-text {
+    background-color: var(--highlight-color);
+    border: 1px solid var(--line-color);
+    border-radius: 3px;
+    padding: 0.5em 1em 0;
+    margin-bottom: 0.5em;
+    & pre {
+      padding: 0;
+      width: auto;
+    }
+  }
+  & > *:first-child {
+    border: none;
+    /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+       support flexbox yet.
+    */
+    display: table;
+    margin: 0 auto;
+  }
 }
 
 /* lists */
@@ -429,26 +433,25 @@ dl {
     --indent: 5ch;
     & > dt {
       min-width: calc(var(--indent) - 2ch);
+      float: none;
     }
-  }
-  &.olPercent > dt {
-    float: none;
   }
 
   dl > dd > & {
     margin-top: 0.5em;
     margin-bottom: 0;
   }
-}
-dl:not(.dlNewline) > dt {
-  float: left;
-  margin-right: 2ch;
-  min-width: 8ch;
-}
-dl > dd {
-  margin-bottom: .8em;
-  margin-left: var(--indent) !important; /* stupid element overrides */
-  min-height: 2ex;
+
+  &:not(.dlNewline) > dt {
+    float: left;
+    margin-right: 2ch;
+    min-width: 8ch;
+  }
+  & > dd {
+    margin-bottom: .8em;
+    margin-left: var(--indent) !important; /* stupid element overrides */
+    min-height: 2ex;
+  }
 }
 :is(dl.compact, .dlCompact) > dd {
   margin-bottom: 0;
@@ -464,20 +467,22 @@ dl > dd {
 }
 
 /* links */
-a, a[href].selfRef:hover {
+a {
   text-decoration: none;
+  &[href] {
+    color: var(--link-color);
+    &:hover { text-decoration: underline; }
+    &.selfRef {
+      color: var(--text-color);
+      &:hover {
+        text-decoration: none;
+        background-color: var(--highlight-color);
+      }
+    }
+  }
 }
-a[href] {
-  color: var(--link-color);
-}
-a[href].selfRef, .iref + a[href].internal {
+.iref + a[href].internal {
   color: var(--text-color);
-}
-a[href]:hover {
-  text-decoration: underline;
-}
-a[href].selfRef:hover {
-  background-color: var(--highlight-color);
 }
 a.xref:is(.cite, .auto), :is(#status-of-memo, #copyright) a {
   white-space: nowrap;
@@ -513,9 +518,9 @@ img {
 figure {
   margin: 0.5em 0;
   padding: 0;
-}
-figure blockquote {
-  margin: 0.8em 0.4em 0.4em;
+  & blockquote {
+    margin: 0.8em 0.4em 0.4em;
+  }
 }
 figcaption, caption {
   font-style: italic;
@@ -525,17 +530,19 @@ figcaption, caption {
 }
 @media screen {
   /* Auto-collapse boilerplate. */
-  :is(#status-of-memo, #copyright) p {
-    margin: -2px 0;
-    max-height: 0;
-    transition: max-height 2s ease, margin 0.5s ease 0.5s;
-    overflow: hidden;
-  }
-  :is(#status-of-memo, #copyright):hover p,
-  :is(#status-of-memo, #copyright) h2:target ~ p {
-    margin: 0.5em 0;
-    max-height: 500px;
-    overflow: auto;
+  :is(#status-of-memo, #copyright) {
+    & p {
+      margin: -2px 0;
+      max-height: 0;
+      transition: max-height 2s ease, margin 0.5s ease 0.5s;
+      overflow: hidden;
+    }
+    &:hover p,
+    & h2:target ~ p {
+      margin: 0.5em 0;
+      max-height: 500px;
+      overflow: auto;
+    }
   }
   pre, svg {
     display: inline-block;
@@ -585,25 +592,17 @@ table {
   max-width: 100%;
   margin: 0 0 1em;
   border-collapse: collapse;
-}
-table.right {
-  margin-left: auto;
-}
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-table.left {
-  margin-right: auto;
-}
-table .text-left {
-  text-align: left;
-}
-table .text-center {
-  text-align: center;
-}
-table .text-right {
-  text-align: right;
+  &.right { margin-left: auto; }
+  &.center { margin-left: auto; margin-right: auto; }
+  &.left { margin-right: auto; }
+  & .text-left { text-align: left; }
+  & .text-center { text-align: center; }
+  & .text-right { text-align: right; }
+  & caption {
+    margin: 0;
+    padding: 3px 0 3px 1em;
+  }
+  & p { margin: 0; }
 }
 
 thead, tbody {
@@ -623,13 +622,6 @@ th {
 :is(tr:nth-child(2n+1), thead+tbody > tr:nth-child(2n)) > td {
   background-color: var(--highlight-color);
 }
-table caption {
-  margin: 0;
-  padding: 3px 0 3px 1em;
-}
-table p {
-  margin: 0;
-}
 
 /* pilcrow */
 a.pilcrow {
@@ -640,18 +632,16 @@ a.pilcrow {
     color: var(--pilcrow-weak);
     &:hover { text-decoration: none; }
   }
-}
-@media not print {
-  :hover > a.pilcrow, a.pilcrow:focus {
-    opacity: 1;
+  @media not print {
+    :hover > &, &:focus {
+      opacity: 1;
+    }
+    &[href]:hover {
+      color: var(--pilcrow-strong);
+      background-color: transparent;
+    }
   }
-  a.pilcrow[href]:hover {
-    color: var(--pilcrow-strong);
-    background-color: transparent;
-  }
-}
-@media print {
-  a.pilcrow {
+  @media print {
     display: none;
   }
 }
@@ -710,9 +700,9 @@ sub, sup {
   font-size: 0.9em;
   font-style: italic;
   margin-top: 2em;
-}
-.docInfo .prepared {
-  float: right;
+  & .prepared {
+    float: right;
+  }
 }
 
 /* table of contents */
@@ -802,23 +792,27 @@ hr.addr {
   max-width: calc(100% - 16px);
 }
 @media (min-width: 500px) {
-  #authors-addresses > section {
-    column-count: 2;
-    column-gap: 20px;
-  }
-  #authors-addresses > section > h2 {
-    column-span: all;
-  }
-  /* hack for break-inside: avoid-column */
-  #authors-addresses address {
-    display: inline-block;
-    break-inside: avoid-column;
+  #authors-addresses {
+    & > section {
+      column-count: 2;
+      column-gap: 20px;
+    }
+    & > section > h2 {
+      column-span: all;
+    }
+    /* hack for break-inside: avoid-column */
+    & address {
+      display: inline-block;
+      break-inside: avoid-column;
+    }
   }
 }
 
 /* Comments */
-.rfcEditorRemove p:first-of-type {
-  font-style: italic;
+.rfcEditorRemove {
+  & p:first-of-type {
+    font-style: italic;
+  }
 }
 .cref {
   background-color: rgba(249, 232, 105, 0.3);
@@ -829,19 +823,21 @@ hr.addr {
 }
 
 @media screen {
-  #toc nav {
-    font-family: var(--font-title);
-    font-weight: 360;
-    & > ul { margin-bottom: 2em; }
-    & ul {
-      margin: 0 0 0 4px;
-      & :is(p, li) {
-        margin: 2px 0;
+  #toc {
+    & nav {
+      font-family: var(--font-title);
+      font-weight: 360;
+      & > ul { margin-bottom: 2em; }
+      & ul {
+        margin: 0 0 0 4px;
+        & :is(p, li) {
+          margin: 2px 0;
+        }
       }
     }
-  }
-  #toc a.toplink {
-    float: right;
+    & a.toplink {
+      float: right;
+    }
   }
 }
 @media not screen {
@@ -862,54 +858,54 @@ hr.addr {
     margin: 0;
     border-bottom: 1px solid #ccc;
     opacity: 0.6;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 2px 0 2px 6px;
-    padding-right: 1em;
-    font-size: 18px;
-    line-height: 24px;
-    min-width: 190px;
-    text-align: right;
-    background-color: #444;
-    color: white;
-    cursor: pointer;
-    &::before { /* css hamburger */
-      float: right;
-      position: relative;
-      width: 1em;
-      height: 1px;
-      left: -164px;
-      margin: 8px 0 0 0;
-      background: white none repeat scroll 0 0;
-      box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
-      content: "";
+    & h2 {
+      margin: 0;
+      padding: 2px 0 2px 6px;
+      padding-right: 1em;
+      font-size: 18px;
+      line-height: 24px;
+      min-width: 190px;
+      text-align: right;
+      background-color: #444;
+      color: white;
+      cursor: pointer;
+      &::before { /* css hamburger */
+        float: right;
+        position: relative;
+        width: 1em;
+        height: 1px;
+        left: -164px;
+        margin: 8px 0 0 0;
+        background: white none repeat scroll 0 0;
+        box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+        content: "";
+      }
     }
-  }
-  #toc nav {
-    display: none;
-    background-color: var(--background-color);
-    padding: 0.5em 1em 1em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    height: calc(100vh - 48px);
-    border-left: 1px solid #ddd;
-  }
-  #toc.active {
-    opacity: 1;
-    & nav { display: block; }
-  }
-  /* Make the collapsed ToC header render white on gray also when it's a link */
-  #toc h2 a,
-  #toc h2 a:is(:link, :focus, :hover),
-  #toc a.toplink,
-  #toc a.toplink:hover {
-    color: white;
-    background-color: #444;
-    text-decoration: none;
-  }
-  #toc a.toplink {
-    margin: 2px 0.5em 0;
+    & nav {
+      display: none;
+      background-color: var(--background-color);
+      padding: 0.5em 1em 1em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      height: calc(100vh - 48px);
+      border-left: 1px solid #ddd;
+    }
+    &.active {
+      opacity: 1;
+      & nav { display: block; }
+    }
+    /* Make the collapsed ToC header render white on gray also when it's a link */
+    & h2 a,
+    & h2 a:is(:link, :focus, :hover),
+    & a.toplink,
+    & a.toplink:hover {
+      color: white;
+      background-color: #444;
+      text-decoration: none;
+    }
+    & a.toplink {
+      margin: 2px 0.5em 0;
+    }
   }
 }
 
@@ -928,26 +924,26 @@ hr.addr {
     margin: 0;
     padding: 0;
     z-index: 1;
-  }
-  #toc h2 {
-    margin: 0;
-    padding: 0.25em 1em 1em 0;
-  }
-  #toc nav {
-    display: block;
-    height: calc(90vh - 84px);
-    bottom: 0;
-    padding: 0.5em 0 2em;
-    overflow: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
+    & h2 {
+      margin: 0;
+      padding: 0.25em 1em 1em 0;
+    }
+    & nav {
+      display: block;
+      height: calc(90vh - 84px);
+      bottom: 0;
+      padding: 0.5em 0 2em;
+      overflow: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: thin;
+    }
+    & a.toplink {
+      margin: 8px 0.5em 0;
+    }
   }
   img { /* future proofing */
     max-width: 100%;
     height: auto;
-  }
-  #toc a.toplink {
-    margin: 8px 0.5em 0;
   }
 }
 
@@ -963,12 +959,13 @@ hr.addr {
   #n-copyright-notice {
     border-bottom: none;
   }
-  #toc, #n-introduction {
-    page-break-before: always;
-  }
   #toc {
+    page-break-before: always;
     border-top: none;
     padding-top: 0;
+  }
+  #n-introduction {
+    page-break-before: always;
   }
   figure, pre, .vcard {
     page-break-inside: avoid;
@@ -1030,17 +1027,19 @@ hr.addr {
 }
 
 /* SVG Trick: a prefix match works because only black and white are allowed */
-svg :is([stroke="black"], [stroke^="#000"]) {
-  stroke: var(--text-color);
-}
-svg :is([stroke="white"], [stroke^="#fff"]) {
-  stroke: var(--background-color);
-}
-svg :is([fill="black"], [fill^="#000"], :not([fill])) {
-  fill: var(--text-color);
-}
-svg :is([fill="white"], [fill^="#fff"]) {
-  fill: var(--background-color);
+svg {
+  & :is([stroke="black"], [stroke^="#000"]) {
+    stroke: var(--text-color);
+  }
+  & :is([stroke="white"], [stroke^="#fff"]) {
+    stroke: var(--background-color);
+  }
+  & :is([fill="black"], [fill^="#000"], :not([fill])) {
+    fill: var(--text-color);
+  }
+  & :is([fill="white"], [fill^="#fff"]) {
+    fill: var(--background-color);
+  }
 }
 </style>
 
@@ -1050,11 +1049,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">authz-policy-sharing-model</td>
-<td class="right">February 2026</td>
+<td class="right">June 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Rodríguez, et al.</td>
-<td class="center">Expires 28 August 2026</td>
+<td class="center">Expires 7 December 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1066,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-cabanillas-nmop-authz-policy-sharing-model-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-02-24" class="published">24 February 2026</time>
+<time datetime="2026-06-05" class="published">5 June 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-08-28">28 August 2026</time></dd>
+<dd class="expires"><time datetime="2026-12-07">7 December 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1093,8 +1092,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Model for distributed authorization policy sharing</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of authorization policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, versioned, exchanged, and removed across heterogeneous systems and domains.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of authorization policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, exchanged, and removed across heterogeneous systems and areas.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 <p id="section-abstract-2">The framework defines how authorization policies, expressed in declarative Policy-as-Code (PaC) languages, are encapsulated, managed, and distributed using YANG as the canonical representation format. This separation allows independent evolution of policy languages, enforcement architectures, and trust models.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">The model also defines extensible Policy-as-Code language identities using YANG identity and identityref mechanisms, enabling future policy languages to be incorporated without modifying the core schema.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1131,7 +1131,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 28 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 7 December 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1174,6 +1174,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-policy-representation-in-ya" class="internal xref">Policy representation in YANG</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-example-json-encoding" class="internal xref">Example JSON Encoding</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-architecture-overview" class="internal xref">Architecture Overview</a></p>
@@ -1222,7 +1227,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">The increasing complexity and automation of distributed systems, such as programmable networks, multi-cloud platforms, and intent-based infrastructures, require scalable and interoperable mechanisms for managing authorization policies. In these environments, policies are no longer confined to static configuration files or manually managed. Instead, they are dynamic artifacts that must be created, validated, distributed, updated, and eliminated programmatically.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">Authorization policies increasingly govern not only access control but also operational behavior, compliance requirements, and governance constraints across multiple domains. These policies may be authored in one domain, distributed through another, and enforced in many. As a result, consistent handling of policies throughout their lifecycle becomes critical.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-2">Authorization policies increasingly govern not only access control but also operational behavior, compliance requirements, and governance constraints across multiple areas. These policies may be authored in one area, distributed through another, and enforced in many. As a result, consistent handling of policies throughout their lifecycle becomes critical.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Existing approaches often rely on system-specific policy formats and ad hoc distribution mechanisms, leading to several challenges:<a href="#section-1-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-1-4.1">
@@ -1238,7 +1243,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
           <p id="section-1-4.4.1">Governance gaps: Systems frequently lack mechanisms to verify whether a policy author is permitted to define policies for a specific domain.<a href="#section-1-4.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-1-5">To address these challenges, this document defines a structured and interoperable framework for representing and managing authorization policies as governed artifacts. YANG is used as the canonical representation format for policy artifacts. A YANG-defined policy encapsulates its metadata together with embedded declarative Policy-as-Code content, which is treated as opaque executable logic. This structured representation enables schema-based validation, immutable semantic versioning, and verifiable lifecycle transitions while remaining agnostic to the underlying evaluation engine.<a href="#section-1-5" class="pilcrow">¶</a></p>
+<p id="section-1-5">To address these challenges, this document defines a structured and interoperable framework for representing and managing authorization policies as governed artifacts. YANG is used as the canonical representation format for policy artifacts. A YANG-defined policy encapsulates its metadata together with embedded declarative Policy-as-Code content, which is treated as opaque executable logic. This structured representation enables schema-based validation, provenance verification, and interoperable lifecycle management while remaining agnostic to the underlying evaluation engine.<a href="#section-1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1259,7 +1264,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
           <p id="section-2-3.2.1">Authorization policy: A policy that governs access or permissions based on user/agent, resource, or environmental attributes.<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.3">
-          <p id="section-2-3.3.1">Policy lifecycle: The set of stages through which a policy passes, including creation, validation, versioning, distribution, update, and removal.<a href="#section-2-3.3.1" class="pilcrow">¶</a></p>
+          <p id="section-2-3.3.1">Policy lifecycle: The set of stages through which a policy passes, including creation, validation, distribution, update, rollback, and removal.<a href="#section-2-3.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-2-3.4">
           <p id="section-2-3.4.1">Policy-as-Code (PaC): A paradigm in which policies are represented as declarative code artifacts, allowing automation, versioning, and testing.<a href="#section-2-3.4.1" class="pilcrow">¶</a></p>
@@ -1278,13 +1283,13 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
           <p id="section-3-2.1.1">Granularity: Policies <span class="bcp14">SHOULD</span> be able to express fine-grained authorization rules over users, resources, and contextual conditions.<a href="#section-3-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-3-2.2">
-          <p id="section-3-2.2.1">Lifecycle control: Policies <span class="bcp14">MUST</span> support creation, versioning, validation, and removal.<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
+          <p id="section-3-2.2.1">Lifecycle control: Policies <span class="bcp14">SHOULD</span> support creation, validation, update, rollback, distribution, and removal.<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-3-2.3">
-          <p id="section-3-2.3.1">Interoperability: Policy representations <span class="bcp14">SHOULD</span> be portable and interpretable across different administrative domains.<a href="#section-3-2.3.1" class="pilcrow">¶</a></p>
+          <p id="section-3-2.3.1">Interoperability: Policy representations <span class="bcp14">SHOULD</span> be portable and interpretable across different administrative areas.<a href="#section-3-2.3.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-3-2.4">
-          <p id="section-3-2.4.1">Verifiability: The framework <span class="bcp14">MUST</span> provide mechanisms to verify policy integrity and provenance.<a href="#section-3-2.4.1" class="pilcrow">¶</a></p>
+          <p id="section-3-2.4.1">Verifiability: The framework <span class="bcp14">SHOULD</span> provide mechanisms to verify policy integrity and provenance.<a href="#section-3-2.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
@@ -1295,7 +1300,7 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-policy-as-code-and-declarat" class="section-name selfRef">Policy-as-Code and Declarative Policy Languages</a>
       </h2>
 <p id="section-4-1">Declarative Policy-as-Code (PaC) languages, such as Rego <span>[<a href="#Rego" class="cite xref">Rego</a>]</span>, Cedar <span>[<a href="#Cedar" class="cite xref">Cedar</a>]</span>, or ALFA <span>[<a href="#ALFA" class="cite xref">ALFA</a>]</span>, are widely used to express authorization logic in distributed systems. Although these languages differ in syntax, evaluation models, and execution environments, they share common lifecycle and governance requirements when used in distributed and multi-domain environments.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<p id="section-4-2">This framework treats PaC content as opaque executable logic embedded within a YANG-defined policy artifact. The YANG representation does not interpret, validate, or constrain the internal semantics of the policy language. Instead, it provides a structured and interoperable container for lifecycle governance, version control, provenance binding, and distribution.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-2">This framework treats PaC content as opaque executable logic embedded within a YANG-defined policy artifact. The YANG representation does not interpret, validate, or constrain the internal semantics of the policy language. Instead, it provides a structured and interoperable container for lifecycle governance, version control, provenance binding, and distribution. The policy language itself is modeled using YANG identities and identity references. This approach follows extensibility patterns, allowing implementations to introduce additional Policy-as-Code languages without modifying the base model.<a href="#section-4-2" class="pilcrow">¶</a></p>
 <p id="section-4-3">By separating policy handling from policy semantics, including evaluation logic and decision outcomes, this framework enables interoperability without constraining innovation in policy languages or enforcement technologies.<a href="#section-4-3" class="pilcrow">¶</a></p>
 <p id="section-4-4">Example in Rego syntax:<a href="#section-4-4" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-4-5">
@@ -1319,7 +1324,7 @@ allow {
 <p id="section-5-1">YANG provides a structured and schema-driven mechanism for representing authorization policies as managed and governed artifacts. In this framework, YANG serves as the canonical container format for policy definitions, encapsulating:<a href="#section-5-1" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-5-2.1">
-          <p id="section-5-2.1.1">Policy metadata, including owner, description and version.<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-5-2.1.1">Policy metadata, including owner, area, and description.<a href="#section-5-2.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-2.2">
           <p id="section-5-2.2.1">The declarative language used to express the policy logic.<a href="#section-5-2.2.1" class="pilcrow">¶</a></p>
@@ -1331,90 +1336,172 @@ allow {
           <p id="section-5-2.4.1">Optional leaf for validation and provenance.<a href="#section-5-2.4.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-5-3">Each policy instance <span class="bcp14">MUST</span> include a semantic version following a controlled versioning scheme (for example, Git-style tags such as <code>v1.0.0</code>). Version values <span class="bcp14">MUST</span> uniquely identify immutable policy content. Once a specific version is stored, it <span class="bcp14">MUST NOT</span> be modified. Any change to the policy logic or its governance metadata <span class="bcp14">MUST</span> result in the creation of a new version. Versioning is therefore a fundamental requirement of Policy-as-Code governance. Maintaining historical versions enables controlled updates, rollback to previous versions, auditability, and forensic analysis in case of misconfiguration or dispute.<a href="#section-5-3" class="pilcrow">¶</a></p>
-<p id="section-5-4">In addition, each policy instance <span class="bcp14">MUST</span> include an explicit owner attribute that identifies the authority responsible for the policy definition, ensuring accountability within and across domains. By associating a policy with a clearly identified authority, the framework enables governance controls and allows systems to determine whether the policy source is authorized within a given scope. The owner attribute <span class="bcp14">MUST</span> be expressed as a URI that uniquely identifies the authoritative entity responsible for the policy.<a href="#section-5-4" class="pilcrow">¶</a></p>
+<p id="section-5-3">In addition, each policy instance <span class="bcp14">MUST</span> include an explicit owner attribute that identifies the authority responsible for the policy definition, ensuring accountability within and across domains. By associating a policy with a clearly identified authority, the framework enables governance controls and allows systems to determine whether the policy source is authorized within a given scope. The owner attribute <span class="bcp14">MUST</span> be expressed as a URI that uniquely identifies the authoritative entity responsible for the policy.<a href="#section-5-3" class="pilcrow">¶</a></p>
+<p id="section-5-4">The policy language is represented using YANG identities and identity references rather than fixed enumerations. This design follows common extensibility practices in YANG models, enabling future Policy-as-Code languages to be introduced dynamically without requiring modifications to the base schema.<a href="#section-5-4" class="pilcrow">¶</a></p>
 <p id="section-5-5">The specific URI structure is determined by the administrative environment. Ownership metadata <span class="bcp14">MAY</span> be cryptographically linked to the policy provenance, enabling verification against the provenance signature key. This mechanism ensures that the policy origin and integrity can be independently verified and trusted.<a href="#section-5-5" class="pilcrow">¶</a></p>
 <p id="section-5-6">The YANG model below illustrates a simplified structure for representing authorization policies as managed artifacts:<a href="#section-5-6" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-5-7">
 <pre>
 module authz-policy {
-    namespace "urn:ietf:params:xml:ns:yang:authz-policy";
-    prefix pac;
-    organization
-        "IETF NMOP";
-    contact
-        "WG Web:   &lt;https://datatracker.ietf.org/wg/nmop/&gt;
-        WG List:  &lt;mailto:nmop@ietf.org&gt;
-    Authors:
-        Lucía Cabanillas &lt;mailto:lucia.cabanillasrodriguez@telefonica.com&gt;
-        Diego López &lt;mailto:diego.r.lopez@telefonica.com&gt;
-        Ana Méndez Pérez &lt;mailto:ana.mendezperez@telefonica.com&gt;";
-    import ietf-yang-provenance {
-        prefix iyangprov;
+  namespace "urn:ietf:params:xml:ns:yang:authz-policy";
+  prefix pac;
+
+  import ietf-yang-provenance {
+    prefix iyangprov;
+  }
+
+  organization
+    "IETF NMOP Working Group";
+
+  contact
+    "WG Web:   &lt;https://datatracker.ietf.org/wg/nmop/&gt;
+
+     WG List:  &lt;mailto:nmop@ietf.org&gt;
+
+     Authors:
+       Lucía Cabanillas
+       &lt;mailto:lucia.cabanillasrodriguez@telefonica.com&gt;
+
+       Diego López
+       &lt;mailto:diego.r.lopez@telefonica.com&gt;
+
+       Ana Méndez Pérez
+       &lt;mailto:ana.mendezperez@telefonica.com&gt;";
+
+  description
+    "Illustrative YANG model for representing distributed authorization policies as managed artifacts.";
+
+  revision 2026-05-27 {
+    description
+      "Third revision.";
+    reference
+      "RFC XXXX: Model for distributed
+       authorization policy sharing";
+  }
+
+  /*
+   * Identities
+   */
+
+  identity policy-language {
+    description
+      "Abstract base identity for Policy-as-Code languages.";
+  }
+
+  identity rego {
+    base policy-language;
+    description
+      "Rego policy language.";
+  }
+
+  identity cedar {
+    base policy-language;
+    description
+      "Cedar policy language.";
+  }
+
+  identity alfa {
+    base policy-language;
+    description
+      "ALFA authorization language.";
+  }
+
+  /*
+   * Typedefs
+   */
+
+  typedef policy-language-ref {
+    type identityref {
+      base policy-language;
     }
     description
-        "Illustrative YANG model for representing authorization policies as managed artifacts";
-    revision 2026-02-10 {
-        description
-            "Second revision";
-        reference
-            "RFC XXXX: Model for distributed authorization policy sharing";
-     }
-    container policy {
-        leaf description {
-            type string;
-            description
-                "Optional human-readable description of the policy";
-        }
-        leaf language {
-            type enumeration {
-                enum rego {
-                    description "The policy is written in Rego syntax";
-                }
-                enum cedar {
-                    description "The policy is written in Cedar syntax";
-                }
-                enum alfa {
-                    description "The policy is defined in ALFA format";
-                }
-            }
-            mandatory true;
-            description
-                "Specifies the language used to express the policy";
-        }
-        leaf pac {
-            type string;
-            mandatory true;
-            description
-                "Example:    package example
-                # Allow read access if the user has the 'read' role
-                default allow = false
-                allow {
-                    input.user.role ==\"read\"
-                }";
-        }
-        leaf owner {
-            type uri;
-            mandatory true;
-            description
-                "URI identifying the authoritative entity responsible for this policy";
-        }
-        leaf version {
-            type string;
-            mandatory true;
-            description
-                "Semantic version of the policy following Git-style tags (e.g., v1.0.0)";
-        }
-        leaf policy-provenance {
-            type iyangprov:provenance-signature;
-            description
-                "Signature proving provenance of the policy";
-        }
+      "Reference to a Policy-as-Code language identity.";
+  }
+
+  /*
+   * Policy model
+   */
+
+  container policy {
+    description
+      "Container representing an authorization policy artifact.";
+
+    leaf area {
+      type string;
+      mandatory true;
+      description
+        "Administrative or operational area to which the policy belongs.";
     }
+
+    leaf description {
+      type string;
+      description
+        "Optional human-readable description of the policy.";
+    }
+
+    leaf language {
+      type policy-language-ref;
+      mandatory true;
+      description
+        "Specifies the Policy-as-Code language used to express the policy.";
+    }
+
+    leaf pac {
+      type string;
+      mandatory true;
+      description
+        "Opaque Policy-as-Code content.
+
+         Example:
+
+           package example
+
+           default allow = false
+
+           allow if{
+             input.user.role == \"read\"
+           }";
+    }
+
+    leaf owner {
+      type uri;
+      mandatory true;
+      description
+        "URI identifying the authoritative entity responsible for this policy.";
+    }
+
+    leaf policy-provenance {
+      type iyangprov:provenance-signature;
+      description
+        "Cryptographic provenance signature associated with the policy.";
+    }
+  }
 }
 </pre><a href="#section-5-7" class="pilcrow">¶</a>
 </div>
 <p id="section-5-8">This YANG snippet demonstrates how policy content can be represented as structured data while keeping the logic in a declarative format. By explicitly indicating the language, management systems can validate and process policies appropriately, enabling interoperability between tools and engines.<a href="#section-5-8" class="pilcrow">¶</a></p>
+<div id="example-json-encoding">
+<section id="section-5.1">
+        <h3 id="name-example-json-encoding">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-example-json-encoding" class="section-name selfRef">Example JSON Encoding</a>
+        </h3>
+<p id="section-5.1-1">The following example illustrates how a policy instance can be represented using JSON encoding for the YANG model:<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<div class="lang-json sourcecode" id="section-5.1-2">
+<pre>
+{
+  "authz-policy:policy": {
+    "area": "finance",
+    "description": "Policy example: Allow read access for 'reader' role and write access for 'admin'",
+    "language": "authz-policy:rego",
+    "pac": "package policy\n\ndefault allow = false\n\nallow if{\n    input.user.role == \"reader\"\n}\n\nallow_write if{\n    input.user.role == \"admin\"\n}",
+    "owner": "urn:example:user:lucia"
+  }
+}
+</pre><a href="#section-5.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-5.1-3">In this example, the <code>language</code> leaf references the <code>rego</code> identity defined in the YANG module through an <code>identityref</code>. Additional Policy-as-Code languages may be introduced by defining new identities derived from the <code>policy-language</code> base identity.<a href="#section-5.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="architecture-overview">
@@ -1422,17 +1509,17 @@ module authz-policy {
       <h2 id="name-architecture-overview">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-architecture-overview" class="section-name selfRef">Architecture Overview</a>
       </h2>
-<p id="section-6-1">Policy management in distributed environments relies on a set of functional components that cooperate to define, govern, distribute, evaluate, and enforce authorization policies across administrative domains <span>[<a href="#RFC2904" class="cite xref">RFC2904</a>]</span>. This framework adopts that functional separation while introducing structured policy representation and lifecycle governance based on YANG.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-1">Policy management in distributed environments relies on a set of functional components that cooperate to define, govern, distribute, evaluate, and enforce authorization policies across administrative areas <span>[<a href="#RFC2904" class="cite xref">RFC2904</a>]</span>. This framework adopts that functional separation while introducing structured policy representation and lifecycle governance based on YANG.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <div id="functional-roles">
 <section id="section-6.1">
         <h3 id="name-functional-roles">
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-functional-roles" class="section-name selfRef">Functional Roles</a>
         </h3>
-<p id="section-6.1-1">Policy Author: The entity (human or automated system/agent) responsible for creating the policy definition. The author produces a YANG-encoded policy document that includes metadata (description, version, language, owner) and the actual declarative rule.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.1-1">Policy Author: The entity (human or automated system/agent) responsible for creating the policy definition. The author produces a YANG-encoded policy document that includes metadata (description, area, language, owner) and the actual declarative rule.<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">Policy Administration Point (PAP): The Policy Administration Point manages the lifecycle and governance of policy artifacts. Upon receiving a YANG-encoded policy, it performs schema validation and, where applicable, verifies provenance using cryptographic mechanisms such as those described in <span>[<a href="#I-D.ietf-opsawg-yang-provenance" class="cite xref">I-D.ietf-opsawg-yang-provenance</a>]</span>.<a href="#section-6.1-2" class="pilcrow">¶</a></p>
-<p id="section-6.1-3">The PAP enforces version uniqueness and immutability, ensuring that existing versions are never modified. Any change to policy content or metadata results in the creation of a new version. The PAP maintains historical versions to support rollback and audit requirements.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
-<p id="section-6.1-4">Before accepting or distributing a policy artifact, the Policy Administration Point (PAP) <span class="bcp14">MAY</span> perform an authorization verification step. In this step, the PAP queries a Policy Decision Point to determine whether the declared owner or submitting entity is authorized to define or modify policies within the relevant domain.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
-<p id="section-6.1-5">All lifecycle events, including creation, update, activation, rollback, and decommissioning, <span class="bcp14">MUST</span> be recorded in an append-only accounting ledger to ensure traceability and auditability.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.1-3">The PAP <span class="bcp14">MAY</span> maintain historical policy revisions through external version-control systems in order to support rollback, auditing, and policy recovery operations.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1-4">Before accepting or distributing a policy artifact, the Policy Administration Point (PAP) <span class="bcp14">MAY</span> perform an authorization verification step. In this step, the PAP queries a Policy Decision Point to determine whether the declared owner or submitting entity is authorized to define or modify policies within the relevant area.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+<p id="section-6.1-5">All lifecycle events, including creation, update, activation, rollback, and decommissioning, <span class="bcp14">MAY</span> be recorded in an append-only accounting ledger to ensure traceability and auditability.<a href="#section-6.1-5" class="pilcrow">¶</a></p>
 <p id="section-6.1-6">Once validated and authorized, the PAP distributes the executable policy artifact to the appropriate decision components.<a href="#section-6.1-6" class="pilcrow">¶</a></p>
 <p id="section-6.1-7">Policy Decision Point (PDP): The Policy Decision Point evaluates policy logic at runtime. It receives validated policy artifacts and processes authorization requests based on contextual attributes, claims, or environmental information. The PDP produces authorization decisions such as Permit or Deny, optionally including obligations or advice.<a href="#section-6.1-7" class="pilcrow">¶</a></p>
 <p id="section-6.1-8">Policy Enforcement Point (PEP): The PEP enforces the decisions issued by the PDP. Enforcement may include granting or denying access, applying configurations, or triggering operational actions.<a href="#section-6.1-8" class="pilcrow">¶</a></p>
@@ -1470,9 +1557,10 @@ module authz-policy {
               |-----------------------------------|
               | - Runtime policy evaluation       |
               +------------------+----------------+
+                                 ^
+                                 | Authorization request
                                  |
-                                 |  Authorization decision
-                                 v
+                                 v Authorization decision
               +-----------------------------------+
               | Policy Enforcement Point (PEP)    |
               |-----------------------------------|
@@ -1491,8 +1579,8 @@ module authz-policy {
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-other-models" class="section-name selfRef">Other Models</a>
       </h2>
 <p id="section-7-1">Existing data models demonstrate that YANG can be effectively used to carry authorization-related information in operational environments.<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">The OpenConfig gNSI authorization model <span>[<a href="#OCgNSI" class="cite xref">OCgNSI</a>]</span> defines a YANG module that represents metadata associated with gRPC authorization policies installed on network devices. That model focuses on device-level state and observability, including policy versioning, creation time, and success/failure counters collected during authorization evaluation.<a href="#section-7-2" class="pilcrow">¶</a></p>
-<p id="section-7-3">This document is complementary to that approach. While the OpenConfig model concentrates on operational visibility for a specific enforcement technology, the framework defined here focuses on the representation, lifecycle management, provenance, and distribution of authorization policy artifacts across systems and administrative domains.<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-2">The OpenConfig gNSI authorization model <span>[<a href="#OCgNSI" class="cite xref">OCgNSI</a>]</span> defines a YANG module that represents metadata associated with gRPC authorization policies installed on network devices. That model focuses on device-level state and observability, including policy metadata, operational status, and evaluation counters.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3">This document is complementary to that approach. While the OpenConfig model concentrates on operational visibility for a specific enforcement technology, the framework defined here focuses on the representation, lifecycle management, provenance, and distribution of authorization policy artifacts across systems and administrative areas.<a href="#section-7-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="security-considerations">
@@ -1502,7 +1590,7 @@ module authz-policy {
       </h2>
 <p id="section-8-1">Ensuring the integrity, authenticity, and provenance of policy data is critical to prevent unauthorized modification. Policies <span class="bcp14">SHOULD</span> include cryptographic protection mechanisms that allow their origin and validity to be verified.<a href="#section-8-1" class="pilcrow">¶</a></p>
 <p id="section-8-2">The mechanisms defined in <span>[<a href="#I-D.ietf-opsawg-yang-provenance" class="cite xref">I-D.ietf-opsawg-yang-provenance</a>]</span> — Applying COSE Signatures for YANG Data Provenance — provide a suitable foundation for these protections. That document specifies how COSE signatures <span>[<a href="#RFC9052" class="cite xref">RFC9052</a>]</span> are used to include digital signatures within the YANG data, enabling, in this case, verifiable provenance and ensuring the integrity of the YANG-based distributed authorization policy sharing model proposed in this draft.<a href="#section-8-2" class="pilcrow">¶</a></p>
-<p id="section-8-3">When such provenance mechanisms are applied to policy definitions, each policy instance can include a verifiable signature providing proof of origin and integrity of the provided policy. By treating policies as signed, versioned artifacts, this framework reduces the risk associated with automated and cross-domain policy exchange, including the additional risks in multi-domain deployments such as determining whether a policy has been modified in transit and whether the policy issuer is authorized to define policies applicable to the receiving domain.<a href="#section-8-3" class="pilcrow">¶</a></p>
+<p id="section-8-3">When such provenance mechanisms are applied to policy definitions, each policy instance can include a verifiable signature providing proof of origin and integrity of the provided policy. By treating policies as signed and governed artifacts, this framework reduces the risk associated with automated and cross-domain policy exchange, including the additional risks in multi-domain deployments such as determining whether a policy has been modified in transit and whether the policy issuer is authorized to define policies applicable to the receiving area.<a href="#section-8-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
@@ -1526,7 +1614,7 @@ module authz-policy {
 <dl class="references">
 <dt id="I-D.ietf-opsawg-yang-provenance">[I-D.ietf-opsawg-yang-provenance]</dt>
         <dd>
-<span class="refAuthor">Lopez, D.</span>, <span class="refAuthor">Pastor, A.</span>, <span class="refAuthor">Feng, A. H.</span>, <span class="refAuthor">Pérez, A. M.</span>, and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"Applying COSE Signatures for YANG Data Provenance"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-opsawg-yang-provenance-03</span>, <time datetime="2025-11-03" class="refDate">3 November 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-opsawg-yang-provenance-03">https://datatracker.ietf.org/doc/html/draft-ietf-opsawg-yang-provenance-03</a>&gt;</span>. </dd>
+<span class="refAuthor">Lopez, D.</span>, <span class="refAuthor">Pastor, A.</span>, <span class="refAuthor">Feng, A. H.</span>, <span class="refAuthor">Pérez, A. M.</span>, and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"Applying COSE Signatures for YANG Data Provenance"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-opsawg-yang-provenance-05</span>, <time datetime="2026-05-29" class="refDate">29 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-opsawg-yang-provenance-05">https://datatracker.ietf.org/doc/html/draft-ietf-opsawg-yang-provenance-05</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
         <dd>
