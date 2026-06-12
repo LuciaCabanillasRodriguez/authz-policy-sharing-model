@@ -33,6 +33,9 @@ author:
  - name: Ana Mendez
    organization: Telefónica
    email: "ana.mendezperez@telefonica.com"
+ - name: Pedro Martinez-Julia
+   organization: NICT
+   email: "pedro@nict.go.jp"
 
 normative:
  RFC2904:
@@ -112,7 +115,7 @@ Example in Rego syntax:
 package example
 # Allow read access if the user has the "read" role
 default allow = false
-allow {
+allow if {
     input.user.role == "read"
 }
 ~~~
@@ -123,13 +126,19 @@ The policy logic above is treated as opaque content by the YANG representation. 
 
 YANG provides a structured and schema-driven mechanism for representing authorization policies as managed and governed artifacts. In this framework, YANG serves as the canonical container format for policy definitions, encapsulating:
 
-* Policy metadata, including owner, area, and description.
+* Policy metadata, including owner, author, origin, area, and description.
 * The declarative language used to express the policy logic.
 * The embedded Policy-as-Code (PaC) content, treated as opaque data.
 * Optional leaf for validation and provenance.
 
 
 In addition, each policy instance MUST include an explicit owner attribute that identifies the authority responsible for the policy definition, ensuring accountability within and across domains. By associating a policy with a clearly identified authority, the framework enables governance controls and allows systems to determine whether the policy source is authorized within a given scope. The owner attribute MUST be expressed as a URI that uniquely identifies the authoritative entity responsible for the policy.
+
+The author and origin fields complement the owner. The author field identifies the entity that created the policy. The author will be different from the owner of the policy when the owner of the policy outsources the authorship to other entity. The origin field identifies the object that precedes the policy. Such object can be other policy (more or less general) or extrinsic structure (e.g., the document gathering the administrative operational requirements or a network intent). The author field MUST be fulfilled whereas the origin field is only required when a policy derives from other object.
+
+The area field MUST be filled. It identifies the operational environment of the policy. The area will be used by both the PDP and PEP to restrict the respective decision and enforcement of the policy. An area will define, for example, the outbound walls (boundaries) to which the PEP will limit its reach and focus, as well as the inbound walls (opposite) that will be particularly observed by the PEP to ensure no extrinsic behavior is present within the operation boundaries of the policy. Similarly, the PDP will make use of the area to determine the object, within which it conducts its deliberations, particularly concerning the involved parameters and rules.
+
+The structure of the objects linked by the owner, author and origin fields will be subject to their own schemas. They will be specified separately in ulterior documents.
 
 The policy language is represented using YANG identities and identity references rather than fixed enumerations. This design follows common extensibility practices in YANG models, enabling future Policy-as-Code languages to be introduced dynamically without requiring modifications to the base schema.
 
@@ -163,6 +172,9 @@ module authz-policy {
 
        Ana Méndez Pérez
        <mailto:ana.mendezperez@telefonica.com>";
+
+       Pedro Martinez-Julia 
+       <mailto:pedro@nict.go.jp>";
 
   description
     "Illustrative YANG model for representing distributed authorization policies as managed artifacts.";
@@ -223,7 +235,7 @@ module authz-policy {
       "Container representing an authorization policy artifact.";
 
     leaf area {
-      type string;
+      type uri;
       mandatory true;
       description
         "Administrative or operational area to which the policy belongs.";
@@ -266,6 +278,20 @@ module authz-policy {
         "URI identifying the authoritative entity responsible for this policy.";
     }
 
+    leaf author {
+      type uri;
+      mandatory true;
+      description
+        "URI of the entity that authored the policy";
+    }
+
+    leaf origin {
+      type uri;
+      mandatory false;
+      description 
+        "URI of the entity that originated this policy";
+    }
+
     leaf policy-provenance {
       type iyangprov:provenance-signature;
       description
@@ -284,16 +310,20 @@ The following example illustrates how a policy instance can be represented using
 ~~~json
 {
   "authz-policy:policy": {
-    "area": "finance",
+    "area": "urn:example:server-dmz-layer1",
     "description": "Policy example: Allow read access for 'reader' role and write access for 'admin'",
     "language": "authz-policy:rego",
     "pac": "package policy\n\ndefault allow = false\n\nallow if{\n    input.user.role == \"reader\"\n}\n\nallow_write if{\n    input.user.role == \"admin\"\n}",
-    "owner": "urn:example:user:lucia"
+    "owner": "urn:example:user:lucia",
+    "author": "urn:example:policy-creator",
+    "origin": "urn:example:administrative-operational-requirements"
   }
 }
 ~~~
 
 In this example, the `language` leaf references the `rego` identity defined in the YANG module through an `identityref`. Additional Policy-as-Code languages may be introduced by defining new identities derived from the `policy-language` base identity.
+
+It also extends the rego policy with metadata that describes it, specifies that it is owned by "urn:example:user:lucia", created by "urn:example:policy-creator" (so it was outsourced by the author), originated from the requirement documents identified as "urn:example:administrative-operational-requirements", and scoped to the boundaries determined by "urn:example:server-dmz-layer1".
 
 # Architecture Overview
 

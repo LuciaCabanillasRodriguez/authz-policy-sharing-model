@@ -1,0 +1,152 @@
+module authz-policy {
+  namespace "urn:ietf:params:xml:ns:yang:authz-policy";
+  prefix pac;
+
+  import ietf-yang-provenance {
+    prefix iyangprov;
+  }
+
+  organization
+    "IETF NMOP Working Group";
+
+  contact
+    "WG Web:   <https://datatracker.ietf.org/wg/nmop/>
+
+     WG List:  <mailto:nmop@ietf.org>
+
+     Authors:
+       Lucía Cabanillas
+       <mailto:lucia.cabanillasrodriguez@telefonica.com>
+
+       Diego López
+       <mailto:diego.r.lopez@telefonica.com>
+
+       Ana Méndez Pérez
+       <mailto:ana.mendezperez@telefonica.com>";
+
+       Pedro Martinez-Julia 
+       <mailto:pedro@nict.go.jp>";
+
+  description
+    "Illustrative YANG model for representing distributed authorization policies as managed artifacts.";
+
+  revision 2026-05-27 {
+    description
+      "Third revision.";
+    reference
+      "RFC XXXX: Model for distributed
+       authorization policy sharing";
+  }
+
+  /*
+   * Identities
+   */
+
+  identity policy-language {
+    description
+      "Abstract base identity for Policy-as-Code languages.";
+  }
+
+  identity rego {
+    base policy-language;
+    description
+      "Rego policy language.";
+  }
+
+  identity cedar {
+    base policy-language;
+    description
+      "Cedar policy language.";
+  }
+
+  identity alfa {
+    base policy-language;
+    description
+      "ALFA authorization language.";
+  }
+
+  /*
+   * Typedefs
+   */
+
+  typedef policy-language-ref {
+    type identityref {
+      base policy-language;
+    }
+    description
+      "Reference to a Policy-as-Code language identity.";
+  }
+
+  /*
+   * Policy model
+   */
+
+  container policy {
+    description
+      "Container representing an authorization policy artifact.";
+
+    leaf area {
+      type uri;
+      mandatory true;
+      description
+        "Administrative or operational area to which the policy belongs.";
+    }
+
+    leaf description {
+      type string;
+      description
+        "Optional human-readable description of the policy.";
+    }
+
+    leaf language {
+      type policy-language-ref;
+      mandatory true;
+      description
+        "Specifies the Policy-as-Code language used to express the policy.";
+    }
+
+    leaf pac {
+      type string;
+      mandatory true;
+      description
+        "Opaque Policy-as-Code content.
+
+         Example:
+
+           package example
+
+           default allow = false
+
+           allow if {
+             input.user.role == \"read\"
+           }";
+    }
+
+    leaf owner {
+      type uri;
+      mandatory true;
+      description
+        "URI identifying the authoritative entity responsible for this policy.";
+    }
+
+    leaf author {
+      type uri;
+      mandatory true;
+      description
+        "URI of the entity that authored the policy";
+    }
+
+    leaf origin {
+      type uri;
+      mandatory false;
+      description 
+        "URI of the entity that originated this policy";
+    }
+
+    leaf policy-provenance {
+      type iyangprov:provenance-signature;
+      description
+        "Cryptographic provenance signature associated with the policy.";
+    }
+  }
+}
