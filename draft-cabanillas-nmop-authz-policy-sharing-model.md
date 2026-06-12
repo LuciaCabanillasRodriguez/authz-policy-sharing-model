@@ -173,7 +173,7 @@ module authz-policy {
        Ana Méndez Pérez
        <mailto:ana.mendezperez@telefonica.com>";
 
-       Pedro Martinez-Julia 
+       Pedro Martinez-Julia
        <mailto:pedro@nict.go.jp>";
 
   description
@@ -288,7 +288,7 @@ module authz-policy {
     leaf origin {
       type uri;
       mandatory false;
-      description 
+      description
         "URI of the entity that originated this policy";
     }
 
