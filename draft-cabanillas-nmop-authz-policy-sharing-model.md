@@ -179,9 +179,9 @@ module authz-policy {
   description
     "Illustrative YANG model for representing distributed authorization policies as managed artifacts.";
 
-  revision 2026-05-27 {
+  revision 2026-06-12 {
     description
-      "Third revision.";
+      "Fourth revision.";
     reference
       "RFC XXXX: Model for distributed
        authorization policy sharing";
