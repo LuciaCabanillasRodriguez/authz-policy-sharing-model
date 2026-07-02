@@ -5,10 +5,10 @@
 Network Management Operations                            L. C. Rodríguez
 Internet-Draft                                                  D. Lopez
 Intended status: Informational                                 A. Mendez
-Expires: 14 December 2026                                     Telefónica
+Expires: 3 January 2027                                       Telefónica
                                                        P. Martinez-Julia
                                                                     NICT
-                                                            12 June 2026
+                                                             2 July 2026
 
 
            Model for distributed authorization policy sharing
@@ -69,7 +69,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 December 2026.
+   This Internet-Draft will expire on 3 January 2027.
 
 Copyright Notice
 
@@ -331,9 +331,9 @@ module authz-policy {
   description
     "Illustrative YANG model for representing distributed authorization policies as managed artifacts.";
 
-  revision 2026-05-27 {
+  revision 2026-06-12 {
     description
-      "Third revision.";
+      "Fourth revision.";
     reference
       "RFC XXXX: Model for distributed
        authorization policy sharing";
