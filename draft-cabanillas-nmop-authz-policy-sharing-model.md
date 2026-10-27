@@ -1,39 +1,39 @@
 ---
-title: "Model for distributed authorization policy sharing"
-abbrev: "authz-policy-sharing-model"
+title: "Model for distributed policy sharing"
+abbrev: "policy-sharing-model"
 category: info
 
-docname: draft-cabanillas-nmop-authz-policy-sharing-model-latest
+docname: draft-cabanillas-nmop-policy-sharing-model-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
 consensus: true
-v: 01
+v: 04
 area: "Operations and Management"
 workgroup: "Network Management Operations"
 keyword:
  - policy
- - authorization
+ - distribution
  - lifecycle
 venue:
   group: "Network Management Operations"
   type: "Working Group"
   mail: "nmop@ietf.org"
   arch: "https://mailarchive.ietf.org/arch/browse/nmop/"
-  github: "LuciaCabanillasRodriguez/authz-policy-sharing-model"
+  github: "LuciaCabanillasRodriguez/policy-sharing-model"
   latest: "https://LuciaCabanillasRodriguez.github.io/authz-policy-sharing-model/draft-cabanillas-nmop-authz-policy-sharing-model.html"
 
 author:
  - name: Lucía Cabanillas Rodríguez
    organization: Telefónica
    email: "lucia.cabanillasrodriguez@telefonica.com"
- - name: Diego Lopez
+ - name: Diego López
    organization: Telefónica
    email: "diego.r.lopez@telefonica.com"
- - name: Ana Mendez
+ - name: Ana Méndez
    organization: Telefónica
    email: "ana.mendezperez@telefonica.com"
- - name: Pedro Martinez-Julia
+ - name: Pedro Martínez-Julia
    organization: NICT
    email: "pedro@nict.go.jp"
 
@@ -52,25 +52,27 @@ informative:
  ALFA:
   title: ALFA (Abbreviated Language For Authorization)
   target: https://alfa.guide/alfa-authorization-language/
+ authzen:
+  title: AuthZEN Policy Store Format
+  target: https://datatracker.ietf.org/doc/draft-schwartz-authzen-policy-store/
  OCgNSI:
   title: OpenConfig gNSI Authorization Model
   target: https://www.netconfcentral.org/modules/openconfig-gnsi-authz/2024-02-13/source/raw/
 ...
 
 --- abstract
-This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of authorization policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, exchanged, and removed across heterogeneous systems and areas.
+This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of  policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, exchanged, updated, and removed across heterogeneous systems and administrative domains.
 
-The framework defines how authorization policies, expressed in declarative Policy-as-Code (PaC) languages, are encapsulated, managed, and distributed using YANG as the canonical representation format. This separation allows independent evolution of policy languages, enforcement architectures, and trust models.
+The framework defines how policies, expressed using Policy-as-Code (PaC) languages or other policy languages, are encapsulated and managed using YANG as a canonical representation format. By separating policy lifecycle management from policy semantics, enforcement architectures, and trust frameworks, the model enables a common policy artifact representation that can be reused across diverse implementations and deployment environments.
 
-The model also defines extensible Policy-as-Code language identities using YANG identity and identityref mechanisms, enabling future policy languages to be incorporated without modifying the core schema.
-
+The model represents policy languages using YANG identities and identity references, allowing new policy languages to be incorporated without modifying the core schema. This approach supports extensibility while preserving a consistent structure for policy metadata, provenance, lifecycle management, and distribution.
 --- middle
 
 # Introduction
 
-The increasing complexity and automation of distributed systems, such as programmable networks, multi-cloud platforms, and intent-based infrastructures, require scalable and interoperable mechanisms for managing authorization policies. In these environments, policies are no longer confined to static configuration files or manually managed. Instead, they are dynamic artifacts that must be created, validated, distributed, updated, and eliminated programmatically.
+The increasing complexity and automation of distributed systems, such as programmable networks, multi-cloud platforms, and intent-based infrastructures, require scalable and interoperable mechanisms for managing policies. In these environments, policies are no longer confined to static configuration files or manually managed. Instead, they are dynamic artifacts that must be created, validated, distributed, updated, and eliminated programmatically.
 
-Authorization policies increasingly govern not only access control but also operational behavior, compliance requirements, and governance constraints across multiple areas. These policies may be authored in one area, distributed through another, and enforced in many. As a result, consistent handling of policies throughout their lifecycle becomes critical.
+Policies increasingly govern not only access control but also operational behavior, compliance requirements, and governance constraints across multiple areas. These policies may be authored in one area, distributed through another, and enforced in many. As a result, consistent handling of policies throughout their lifecycle becomes critical.
 
 Existing approaches often rely on system-specific policy formats and ad hoc distribution mechanisms, leading to several challenges:
 
@@ -79,7 +81,7 @@ Existing approaches often rely on system-specific policy formats and ad hoc dist
 * Trust ambiguity: In multi-domain environments, it is often unclear whether a policy source is authorized or trustworthy.
 * Governance gaps: Systems frequently lack mechanisms to verify whether a policy author is permitted to define policies for a specific domain.
 
-To address these challenges, this document defines a structured and interoperable framework for representing and managing authorization policies as governed artifacts. YANG is used as the canonical representation format for policy artifacts. A YANG-defined policy encapsulates its metadata together with embedded declarative Policy-as-Code content, which is treated as opaque executable logic. This structured representation enables schema-based validation, provenance verification, and interoperable lifecycle management while remaining agnostic to the underlying evaluation engine.
+To address these challenges, this document defines a structured and interoperable framework for representing and managing policies as governed artifacts. YANG is used as the canonical representation format for policy artifacts. A YANG-defined policy encapsulates its metadata together with embedded policy content, which is treated as opaque executable logic. This structured representation enables schema-based validation, provenance verification, and interoperable lifecycle management while remaining agnostic to the underlying evaluation engine.
 
 # Conventions and Definitions
 
@@ -94,20 +96,26 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 # Requirements for Policy Management
 
-Systems that manage or exchange authorization policies across domains MUST satisfy the following requirements:
+Systems that manage or exchange policies across domains MUST satisfy the following requirements:
 
-* Granularity: Policies SHOULD be able to express fine-grained authorization rules over users, resources, and contextual conditions.
+* Policy expressiveness: The framework SHOULD support the representation and distribution of policies with varying levels of expressiveness and granularity, depending on the capabilities of the policy language and evaluation environment.
 * Lifecycle control: Policies SHOULD support creation, validation, update, rollback, distribution, and removal.
 * Interoperability: Policy representations SHOULD be portable and interpretable across different administrative areas.
 * Verifiability: The framework SHOULD provide mechanisms to verify policy integrity and provenance.
 
-# Policy-as-Code and Declarative Policy Languages
+# Policy Languages
 
-Declarative Policy-as-Code (PaC) languages, such as Rego {{Rego}}, Cedar {{Cedar}}, or ALFA {{ALFA}}, are widely used to express authorization logic in distributed systems. Although these languages differ in syntax, evaluation models, and execution environments, they share common lifecycle and governance requirements when used in distributed and multi-domain environments.
+Policies can be expressed using a variety of declarative policy languages and policy frameworks, including Policy-as-Code (PaC) languages such as Rego, Cedar, and ALFA, as well as other policy languages such as XACML.
 
-This framework treats PaC content as opaque executable logic embedded within a YANG-defined policy artifact. The YANG representation does not interpret, validate, or constrain the internal semantics of the policy language. Instead, it provides a structured and interoperable container for lifecycle governance, version control, provenance binding, and distribution. The policy language itself is modeled using YANG identities and identity references. This approach follows extensibility patterns, allowing implementations to introduce additional Policy-as-Code languages without modifying the base model.
+Although these technologies differ in syntax, evaluation models, execution environments, and expressive capabilities, they share common lifecycle, governance, provenance, and distribution requirements when used in distributed and multi-domain environments.
 
-By separating policy handling from policy semantics, including evaluation logic and decision outcomes, this framework enables interoperability without constraining innovation in policy languages or enforcement technologies.
+The objective of this framework is not to standardize or promote a particular policy language. Instead, it provides a common artifact format for representing, governing, and distributing policies independently of their internal semantics. As a result, the same lifecycle-management and distribution mechanisms can be applied to policies expressed in different languages.
+
+This framework treats policy content as opaque executable logic embedded within a YANG-defined policy artifact. The YANG representation does not interpret, validate, or constrain the internal semantics of the policy language. Instead, it provides a structured and interoperable container for lifecycle governance, version control, provenance binding, and distribution. 
+
+Policy languages are expected to evolve over time. For this reason, policy languages are represented using YANG identities and identity references, allowing new policy languages to be introduced without modifying the base schema.
+
+Rego is used throughout this document for illustrative purposes only. The artifact model is intended to support any policy language represented through the policy-language identity hierarchy.
 
 Example in Rego syntax:
 
@@ -120,15 +128,19 @@ allow if {
 }
 ~~~
 
-The policy logic above is treated as opaque content by the YANG representation. Its evaluation behavior is determined exclusively by the target execution environment, while lifecycle and governance properties such as version and ownership are managed independently.
+The policy logic above is treated as opaque content by the YANG representation. Its evaluation behavior is determined exclusively by the target execution environment, while lifecycle and governance properties such as the ownership is managed independently.
 
 # Policy representation in YANG
 
-YANG provides a structured and schema-driven mechanism for representing authorization policies as managed and governed artifacts. In this framework, YANG serves as the canonical container format for policy definitions, encapsulating:
+The YANG structure defined in this document does not model a policy repository or datastore. Instead, it defines the representation of a single policy artifact exchanged between lifecycle-management components, such as a Policy Administration Point (PAP) and a Policy Decision Point (PDP), during policy creation, update, rollback, or removal operations.
+
+Consequently, the YANG container represents one policy artifact in transit rather than a collection of policies. The organization of multiple policies within a datastore or repository is implementation-specific and outside the scope of this document.
+
+YANG provides a structured and schema-driven mechanism for representing policies as managed and governed artifacts. In this framework, YANG serves as the canonical container format for policy definitions, encapsulating:
 
 * Policy metadata, including owner, author, origin, area, and description.
-* The declarative language used to express the policy logic.
-* The embedded Policy-as-Code (PaC) content, treated as opaque data.
+* The language used to express the policy logic.
+* The embedded policy content, treated as opaque data.
 * Optional leaf for validation and provenance.
 
 
@@ -140,16 +152,26 @@ The area field MUST be filled. It identifies the operational environment of the 
 
 The structure of the objects linked by the owner, author and origin fields will be subject to their own schemas. They will be specified separately in ulterior documents.
 
-The policy language is represented using YANG identities and identity references rather than fixed enumerations. This design follows common extensibility practices in YANG models, enabling future Policy-as-Code languages to be introduced dynamically without requiring modifications to the base schema.
+The policy language is represented using YANG identities and identity references rather than fixed enumerations. This design follows common extensibility practices in YANG models, enabling future languages to be introduced dynamically without requiring modifications to the base schema.
 
 The specific URI structure is determined by the administrative environment. Ownership metadata MAY be cryptographically linked to the policy provenance, enabling verification against the provenance signature key. This mechanism ensures that the policy origin and integrity can be independently verified and trusted.
+
+The stable elements are the YANG-based artifact structure, provenance bindings, and policy metadata. These elements are independent of the policy evaluation logic and remain unchanged regardless of the policy language or deployment environment.
+
+Similarly, the artifact does not assume any specific enforcement architecture. Centralized, distributed, hierarchical, or domain-specific PDP/PEP deployments can consume the same policy artifact representation.
+
+The model also does not mandate a particular trust framework. While ownership, authorship, origin, and provenance information can be conveyed within the artifact, the interpretation of that information and the resulting trust decisions remain deployment specific.
 
 The YANG model below illustrates a simplified structure for representing authorization policies as managed artifacts:
 
 ~~~
-module authz-policy {
-  namespace "urn:ietf:params:xml:ns:yang:authz-policy";
-  prefix pac;
+module example-policy {
+  namespace "urn:ietf:params:xml:ns:yang:example-policy";
+  prefix policy;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
 
   import ietf-yang-provenance {
     prefix iyangprov;
@@ -173,18 +195,18 @@ module authz-policy {
        Ana Méndez Pérez
        <mailto:ana.mendezperez@telefonica.com>;
 
-       Pedro Martinez-Julia
+       Pedro Martínez-Julia 
        <mailto:pedro@nict.go.jp>";
 
   description
-    "Illustrative YANG model for representing distributed authorization policies as managed artifacts.";
+    "Illustrative YANG model for representing distributed policies as managed artifacts";
 
-  revision 2026-06-12 {
+  revision 2026-07-30 {
     description
-      "Fourth revision.";
+      "Fifth revision";
     reference
       "RFC XXXX: Model for distributed
-       authorization policy sharing";
+       policy sharing";
   }
 
   /*
@@ -193,25 +215,31 @@ module authz-policy {
 
   identity policy-language {
     description
-      "Abstract base identity for Policy-as-Code languages.";
+      "Abstract base identity for policy languages";
   }
 
   identity rego {
     base policy-language;
     description
-      "Rego policy language.";
+      "Rego policy language";
   }
 
   identity cedar {
     base policy-language;
     description
-      "Cedar policy language.";
+      "Cedar policy language";
   }
 
   identity alfa {
     base policy-language;
     description
-      "ALFA authorization language.";
+      "ALFA policy language";
+  }
+
+  identity xacml {
+    base policy-language;
+    description
+      "XACML policy language";
   }
 
   /*
@@ -223,7 +251,7 @@ module authz-policy {
       base policy-language;
     }
     description
-      "Reference to a Policy-as-Code language identity.";
+      "Reference to a policy language identity";
   }
 
   /*
@@ -232,70 +260,59 @@ module authz-policy {
 
   container policy {
     description
-      "Container representing an authorization policy artifact.";
+      "Container representing a policy artifact";
 
     leaf area {
-      type uri;
+      type inet:uri;
       mandatory true;
       description
-        "Administrative or operational area to which the policy belongs.";
+        "Administrative or operational area to which the policy belongs";
     }
 
     leaf description {
       type string;
       description
-        "Optional human-readable description of the policy.";
+        "Optional human-readable description of the policy";
     }
 
     leaf language {
       type policy-language-ref;
       mandatory true;
       description
-        "Specifies the Policy-as-Code language used to express the policy.";
+        "Specifies the policy language used to express the policy";
     }
 
-    leaf pac {
+    leaf policy-content {
       type string;
       mandatory true;
       description
-        "Opaque Policy-as-Code content.
-
-         Example:
-
-           package example
-
-           default allow = false
-
-           allow if{
-             input.user.role == \"read\"
-           }";
+        "Opaque policy content expressed in the language identified by the language leaf";
     }
 
     leaf owner {
-      type uri;
+      type inet:uri;
       mandatory true;
       description
-        "URI identifying the authoritative entity responsible for this policy.";
+        "URI identifying the authoritative entity responsible for this policy";
     }
 
     leaf author {
-      type uri;
+      type inet:uri;
       mandatory true;
       description
         "URI of the entity that authored the policy";
     }
 
     leaf origin {
-      type uri;
-      mandatory false;
-      description
+      type inet:uri;
+      description 
         "URI of the entity that originated this policy";
     }
 
     leaf policy-provenance {
       type iyangprov:provenance-signature;
       description
-        "Cryptographic provenance signature associated with the policy.";
+        "Cryptographic provenance signature associated with the policy";
     }
   }
 }
@@ -309,11 +326,11 @@ The following example illustrates how a policy instance can be represented using
 
 ~~~json
 {
-  "authz-policy:policy": {
+  "example-policy:policy": {
     "area": "urn:example:server-dmz-layer1",
     "description": "Policy example: Allow read access for 'reader' role and write access for 'admin'",
-    "language": "authz-policy:rego",
-    "pac": "package policy\n\ndefault allow = false\n\nallow if{\n    input.user.role == \"reader\"\n}\n\nallow_write if{\n    input.user.role == \"admin\"\n}",
+    "language": "policy:rego",
+    "policy-content": "package policy\n\ndefault allow = false\n\nallow if{\n    input.user.role == \"reader\"\n}\n\nallow_write if{\n    input.user.role == \"admin\"\n}",
     "owner": "urn:example:user:lucia",
     "author": "urn:example:policy-creator",
     "origin": "urn:example:administrative-operational-requirements"
@@ -327,7 +344,7 @@ It also extends the rego policy with metadata that describes it, specifies that 
 
 # Architecture Overview
 
-Policy management in distributed environments relies on a set of functional components that cooperate to define, govern, distribute, evaluate, and enforce authorization policies across administrative areas {{RFC2904}}. This framework adopts that functional separation while introducing structured policy representation and lifecycle governance based on YANG.
+Policy management in distributed environments relies on a set of functional components that cooperate to define, govern, distribute, evaluate, and enforce policies across administrative areas {{RFC2904}}. This framework adopts that functional separation while introducing structured policy representation and lifecycle governance based on YANG.
 
 ## Functional Roles
 
@@ -343,7 +360,7 @@ All lifecycle events, including creation, update, activation, rollback, and deco
 
 Once validated and authorized, the PAP distributes the executable policy artifact to the appropriate decision components.
 
-Policy Decision Point (PDP): The Policy Decision Point evaluates policy logic at runtime. It receives validated policy artifacts and processes authorization requests based on contextual attributes, claims, or environmental information. The PDP produces authorization decisions such as Permit or Deny, optionally including obligations or advice.
+Policy Decision Point (PDP): The Policy Decision Point evaluates policy logic at runtime. It receives validated policy artifacts and processes requests based on contextual attributes, claims, or environmental information. The PDP produces decisions such as Permit or Deny, optionally including obligations or advice.
 
 Policy Enforcement Point (PEP): The PEP enforces the decisions issued by the PDP. Enforcement may include granting or denying access, applying configurations, or triggering operational actions.
 
@@ -378,9 +395,9 @@ The following diagram illustrates the logical interaction flow:
               | - Runtime policy evaluation       |
               +------------------+----------------+
                                  ^
-                                 | Authorization request
+                                 | Request
                                  |
-                                 v Authorization decision
+                                 v Decision
               +-----------------------------------+
               | Policy Enforcement Point (PEP)    |
               |-----------------------------------|
@@ -389,19 +406,42 @@ The following diagram illustrates the logical interaction flow:
 
 ~~~
 
-# Other Models
+## Policy Distribution
 
+This document defines the structure of the policy artifact and its lifecycle semantics but does not mandate a specific transport mechanism for policy distribution.
+
+Policy artifacts MAY be distributed using different protocols and deployment architectures. The choice of distribution mechanism is deployment-specific.
+
+Policy lifecycle operations are represented through management actions performed on policy artifacts:
+
+* Create: introduction of a new policy artifact.
+* Update: replacement of an existing policy artifact.
+* Rollback: restoration of a previous policy revision.
+* Remove: withdrawal of a policy artifact from the receiving domain.
+
+# Relationship to Other Models
+
+## AuthZEN Policy Store
+The AuthZEN Policy Store specification defines a portable representation for organizing and storing authorization policy artifacts independently of a specific Policy Decision Point (PDP) implementation {{authzen}}.
+
+The scope of that work is complementary to the model defined in this document. While a policy store addresses the organization and persistence of policy artifacts, this document focuses on the representation, governance and distribution of individual policy artifacts across administrative domains.
+
+In particular, the YANG structure defined in this document represents a single policy artifact exchanged between policy-management components. It does not define the structure of a policy repository or datastore holding multiple policies. Such a repository may use a policy-store model, while the artifact defined in this document may be used as the unit of policy exchange and distribution.
+
+The separation between policy storage and policy distribution allows the two models to evolve independently while remaining complementary.
+
+## OpenConfig gNSI Authorization Model
 Existing data models demonstrate that YANG can be effectively used to carry authorization-related information in operational environments.
 
 The OpenConfig gNSI authorization model {{OCgNSI}} defines a YANG module that represents metadata associated with gRPC authorization policies installed on network devices. That model focuses on device-level state and observability, including policy metadata, operational status, and evaluation counters.
 
-This document is complementary to that approach. While the OpenConfig model concentrates on operational visibility for a specific enforcement technology, the framework defined here focuses on the representation, lifecycle management, provenance, and distribution of authorization policy artifacts across systems and administrative areas.
+This document is complementary to that approach. While the OpenConfig model concentrates on operational visibility for a specific enforcement technology, the framework defined here focuses on the representation, lifecycle management, provenance, and distribution of policy artifacts across systems and administrative areas.
 
 # Security Considerations
 
 Ensuring the integrity, authenticity, and provenance of policy data is critical to prevent unauthorized modification. Policies SHOULD include cryptographic protection mechanisms that allow their origin and validity to be verified.
 
-The mechanisms defined in {{I-D.ietf-opsawg-yang-provenance}} — Applying COSE Signatures for YANG Data Provenance — provide a suitable foundation for these protections. That document specifies how COSE signatures {{RFC9052}} are used to include digital signatures within the YANG data, enabling, in this case, verifiable provenance and ensuring the integrity of the YANG-based distributed authorization policy sharing model proposed in this draft.
+The mechanisms defined in {{I-D.ietf-opsawg-yang-provenance}} — Applying COSE Signatures for YANG Data Provenance — provide a suitable foundation for these protections. That document specifies how COSE signatures {{RFC9052}} are used to include digital signatures within the YANG data, enabling, in this case, verifiable provenance and ensuring the integrity of the YANG-based distributed policy sharing model proposed in this draft.
 
 When such provenance mechanisms are applied to policy definitions, each policy instance can include a verifiable signature providing proof of origin and integrity of the provided policy. By treating policies as signed and governed artifacts, this framework reduces the risk associated with automated and cross-domain policy exchange, including the additional risks in multi-domain deployments such as determining whether a policy has been modified in transit and whether the policy issuer is authorized to define policies applicable to the receiving area.
 
