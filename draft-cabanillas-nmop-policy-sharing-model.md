@@ -8,7 +8,7 @@ submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
 number:
 date:
 consensus: true
-v: 04
+v: 00
 area: "Operations and Management"
 workgroup: "Network Management Operations"
 keyword:
@@ -59,8 +59,7 @@ informative:
   title: OpenConfig gNSI Authorization Model
   target: https://www.netconfcentral.org/modules/openconfig-gnsi-authz/2024-02-13/source/raw/
 ...
-
---- abstract
+---
 This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of  policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, exchanged, updated, and removed across heterogeneous systems and administrative domains.
 
 The framework defines how policies, expressed using Policy-as-Code (PaC) languages or other policy languages, are encapsulated and managed using YANG as a canonical representation format. By separating policy lifecycle management from policy semantics, enforcement architectures, and trust frameworks, the model enables a common policy artifact representation that can be reused across diverse implementations and deployment environments.
@@ -119,14 +118,14 @@ Rego is used throughout this document for illustrative purposes only. The artifa
 
 Example in Rego syntax:
 
-~~~
+```
 package example
 # Allow read access if the user has the "read" role
 default allow = false
 allow if {
     input.user.role == "read"
 }
-~~~
+```
 
 The policy logic above is treated as opaque content by the YANG representation. Its evaluation behavior is determined exclusively by the target execution environment, while lifecycle and governance properties such as the ownership is managed independently.
 
@@ -142,7 +141,6 @@ YANG provides a structured and schema-driven mechanism for representing policies
 * The language used to express the policy logic.
 * The embedded policy content, treated as opaque data.
 * Optional leaf for validation and provenance.
-
 
 In addition, each policy instance MUST include an explicit owner attribute that identifies the authority responsible for the policy definition, ensuring accountability within and across domains. By associating a policy with a clearly identified authority, the framework enables governance controls and allows systems to determine whether the policy source is authorized within a given scope. The owner attribute MUST be expressed as a URI that uniquely identifies the authoritative entity responsible for the policy.
 
@@ -164,7 +162,7 @@ The model also does not mandate a particular trust framework. While ownership, a
 
 The YANG model below illustrates a simplified structure for representing authorization policies as managed artifacts:
 
-~~~
+```
 module example-policy {
   namespace "urn:ietf:params:xml:ns:yang:example-policy";
   prefix policy;
@@ -316,7 +314,7 @@ module example-policy {
     }
   }
 }
-~~~
+```
 
 This YANG snippet demonstrates how policy content can be represented as structured data while keeping the logic in a declarative format. By explicitly indicating the language, management systems can validate and process policies appropriately, enabling interoperability between tools and engines.
 
@@ -324,7 +322,7 @@ This YANG snippet demonstrates how policy content can be represented as structur
 
 The following example illustrates how a policy instance can be represented using JSON encoding for the YANG model:
 
-~~~json
+```json
 {
   "example-policy:policy": {
     "area": "urn:example:server-dmz-layer1",
@@ -336,7 +334,7 @@ The following example illustrates how a policy instance can be represented using
     "origin": "urn:example:administrative-operational-requirements"
   }
 }
-~~~
+```
 
 In this example, the `language` leaf references the `rego` identity defined in the YANG module through an `identityref`. Additional Policy-as-Code languages may be introduced by defining new identities derived from the `policy-language` base identity.
 
@@ -370,7 +368,7 @@ The interaction among the architectural components reflects a strict separation 
 
 The following diagram illustrates the logical interaction flow:
 
-~~~
+```
                      Policy Author
                            |
                            |  YANG-encoded policy artifact
@@ -404,7 +402,7 @@ The following diagram illustrates the logical interaction flow:
               | - Enforcement of decisions        |
               +-----------------------------------+
 
-~~~
+```
 
 ## Policy Distribution
 
@@ -422,6 +420,7 @@ Policy lifecycle operations are represented through management actions performed
 # Relationship to Other Models
 
 ## AuthZEN Policy Store
+
 The AuthZEN Policy Store specification defines a portable representation for organizing and storing authorization policy artifacts independently of a specific Policy Decision Point (PDP) implementation {{authzen}}.
 
 The scope of that work is complementary to the model defined in this document. While a policy store addresses the organization and persistence of policy artifacts, this document focuses on the representation, governance and distribution of individual policy artifacts across administrative domains.
@@ -431,6 +430,7 @@ In particular, the YANG structure defined in this document represents a single p
 The separation between policy storage and policy distribution allows the two models to evolve independently while remaining complementary.
 
 ## OpenConfig gNSI Authorization Model
+
 Existing data models demonstrate that YANG can be effectively used to carry authorization-related information in operational environments.
 
 The OpenConfig gNSI authorization model {{OCgNSI}} defines a YANG module that represents metadata associated with gRPC authorization policies installed on network devices. That model focuses on device-level state and observability, including policy metadata, operational status, and evaluation counters.
@@ -452,6 +452,7 @@ This document has no IANA actions.
 --- back
 
 # Acknowledgments
+
 {:numbered="false"}
 
 This document is based on work partially funded by the iTrust6G project (Grant agreement N 101097083) and the ROBUST-6G project (Grant agreement N 101139068).
