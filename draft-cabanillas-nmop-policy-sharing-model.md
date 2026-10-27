@@ -111,7 +111,7 @@ Although these technologies differ in syntax, evaluation models, execution envir
 
 The objective of this framework is not to standardize or promote a particular policy language. Instead, it provides a common artifact format for representing, governing, and distributing policies independently of their internal semantics. As a result, the same lifecycle-management and distribution mechanisms can be applied to policies expressed in different languages.
 
-This framework treats policy content as opaque executable logic embedded within a YANG-defined policy artifact. The YANG representation does not interpret, validate, or constrain the internal semantics of the policy language. Instead, it provides a structured and interoperable container for lifecycle governance, version control, provenance binding, and distribution. 
+This framework treats policy content as opaque executable logic embedded within a YANG-defined policy artifact. The YANG representation does not interpret, validate, or constrain the internal semantics of the policy language. Instead, it provides a structured and interoperable container for lifecycle governance, version control, provenance binding, and distribution.
 
 Policy languages are expected to evolve over time. For this reason, policy languages are represented using YANG identities and identity references, allowing new policy languages to be introduced without modifying the base schema.
 
@@ -195,7 +195,7 @@ module example-policy {
        Ana Méndez Pérez
        <mailto:ana.mendezperez@telefonica.com>;
 
-       Pedro Martínez-Julia 
+       Pedro Martínez-Julia
        <mailto:pedro@nict.go.jp>";
 
   description
@@ -305,7 +305,7 @@ module example-policy {
 
     leaf origin {
       type inet:uri;
-      description 
+      description
         "URI of the entity that originated this policy";
     }
 
