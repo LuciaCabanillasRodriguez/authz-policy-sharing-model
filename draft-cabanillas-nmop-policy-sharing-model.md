@@ -59,7 +59,8 @@ informative:
   title: OpenConfig gNSI Authorization Model
   target: https://www.netconfcentral.org/modules/openconfig-gnsi-authz/2024-02-13/source/raw/
 ...
----
+
+--- abstract
 This document defines mechanisms and conventions for the representation, lifecycle management, and distribution of  policies in distributed and automated environments. It specifies a consistent, machine-readable, and interoperable framework that enables policies to be validated, exchanged, updated, and removed across heterogeneous systems and administrative domains.
 
 The framework defines how policies, expressed using Policy-as-Code (PaC) languages or other policy languages, are encapsulated and managed using YANG as a canonical representation format. By separating policy lifecycle management from policy semantics, enforcement architectures, and trust frameworks, the model enables a common policy artifact representation that can be reused across diverse implementations and deployment environments.
@@ -118,14 +119,14 @@ Rego is used throughout this document for illustrative purposes only. The artifa
 
 Example in Rego syntax:
 
-```
+~~~
 package example
 # Allow read access if the user has the "read" role
 default allow = false
 allow if {
     input.user.role == "read"
 }
-```
+~~~
 
 The policy logic above is treated as opaque content by the YANG representation. Its evaluation behavior is determined exclusively by the target execution environment, while lifecycle and governance properties such as the ownership is managed independently.
 
@@ -162,7 +163,7 @@ The model also does not mandate a particular trust framework. While ownership, a
 
 The YANG model below illustrates a simplified structure for representing authorization policies as managed artifacts:
 
-```
+~~~
 module example-policy {
   namespace "urn:ietf:params:xml:ns:yang:example-policy";
   prefix policy;
@@ -314,7 +315,7 @@ module example-policy {
     }
   }
 }
-```
+~~~
 
 This YANG snippet demonstrates how policy content can be represented as structured data while keeping the logic in a declarative format. By explicitly indicating the language, management systems can validate and process policies appropriately, enabling interoperability between tools and engines.
 
@@ -322,7 +323,7 @@ This YANG snippet demonstrates how policy content can be represented as structur
 
 The following example illustrates how a policy instance can be represented using JSON encoding for the YANG model:
 
-```json
+~~~json
 {
   "example-policy:policy": {
     "area": "urn:example:server-dmz-layer1",
@@ -334,7 +335,7 @@ The following example illustrates how a policy instance can be represented using
     "origin": "urn:example:administrative-operational-requirements"
   }
 }
-```
+~~~
 
 In this example, the `language` leaf references the `rego` identity defined in the YANG module through an `identityref`. Additional Policy-as-Code languages may be introduced by defining new identities derived from the `policy-language` base identity.
 
@@ -368,7 +369,7 @@ The interaction among the architectural components reflects a strict separation 
 
 The following diagram illustrates the logical interaction flow:
 
-```
+~~~
                      Policy Author
                            |
                            |  YANG-encoded policy artifact
@@ -402,7 +403,7 @@ The following diagram illustrates the logical interaction flow:
               | - Enforcement of decisions        |
               +-----------------------------------+
 
-```
+~~~
 
 ## Policy Distribution
 
