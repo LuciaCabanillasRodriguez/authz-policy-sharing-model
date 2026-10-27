@@ -453,7 +453,6 @@ This document has no IANA actions.
 --- back
 
 # Acknowledgments
-
 {:numbered="false"}
 
 This document is based on work partially funded by the iTrust6G project (Grant agreement N 101097083) and the ROBUST-6G project (Grant agreement N 101139068).
